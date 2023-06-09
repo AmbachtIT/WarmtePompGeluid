@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace WarmtePompGeluid.Model
 {
-    public record class Output
+    public class Gevel
     {
 
+        public double Xh1 { get; set; }
 
-        public bool VoldoetDag { get; set; }
-
-        public bool VoldoetNacht { get; set; }
-
+        public double Xh2 { get; set; }
 
     }
 }

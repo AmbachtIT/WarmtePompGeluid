@@ -5,127 +5,67 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using WarmtePompGeluid.Model;
 
 namespace WarmtePompGeluid.Excel
 {
     public static class CellMapper
     {
 
-        public static T MapSheetToObject<T>(this ISheet sheet) => (T)sheet.MapSheetToObject(typeof(T));
-
-        public static object MapSheetToObject(this ISheet sheet, Type type)
+        public static void WriteToWorkbook(this IWorkbook workbook, Input input)
         {
-            var result = type.GetConstructor(Type.EmptyTypes).Invoke(null);
-            foreach (var prop in type.GetProperties())
+            var sheet = workbook.GetSheet(input.Model);
+            if (sheet == null)
             {
-                var value =
-                    prop.PropertyType.IsClass && prop.PropertyType != typeof(string)
-                        ? GetClassValue(sheet, prop)
-                        : GetStructValue(sheet, prop);
-                if (value != null)
-                {
-                    prop.SetValue(result, value);
-                }
-
+                throw new InvalidOperationException();
             }
-
-            return result;
+            sheet.WriteToSheet(input);
         }
 
 
-        public static void MapObjectToSheet<T>(this ISheet sheet, T obj) => sheet.MapObjectToSheet(typeof(T), obj);
-
-        public static void MapObjectToSheet(this ISheet sheet, Type type, object obj)
+        public static void WriteToSheet(this ISheet sheet, Input input)
         {
-            foreach (var prop in type.GetProperties())
-            {
-                if (prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
-                {
-                    SetClassValue(sheet, prop, obj);
-                }
-                else
-                {
-                    SetStructValue(sheet, prop, obj);
-                }
-            }
+            sheet.WriteToSheet(input.PlanGegevens);
+        }
+
+        public static void WriteToSheet(this ISheet sheet, PlanGegevens gegevens)
+        {
+            var reference = new CellReference("B1");
+            sheet.SetValue(reference = reference.Below(), gegevens.Omschrijving);
+            sheet.SetValue(reference = reference.Below(), gegevens.Organisatie);
+            sheet.SetValue(reference = reference.Below(), gegevens.Uitvoerder);
         }
 
 
-        private static void SetStructValue(ISheet sheet, PropertyInfo prop, object obj)
+        public static Output ReadOutput(this IWorkbook workbook, Input input)
         {
-            var attr = prop.GetCustomAttributes<CellAttribute>().SingleOrDefault();
-            var cell = GetCell(sheet, attr);
-            if (cell == null)
+            var sheet = workbook.GetSheet(input.Model);
+            if (sheet == null)
             {
-                return;
+                throw new InvalidOperationException();
             }
 
-            var value = prop.GetValue(obj, null);
-            if (value == null)
-            {
-                cell.SetBlank();
-            }
-            else
-            {
-                if (prop.PropertyType == typeof(string))
-                {
-                    cell.SetCellValue(value?.ToString());
-                }
-                else if (prop.PropertyType == typeof(double))
-                {
-                    cell.SetCellValue((double)value);
-                }
-                else throw new InvalidOperationException("Unexpected property value: " + prop.PropertyType);
-            }
-
+            return ReadOutput(sheet, input.Model);
         }
 
-        private static object GetStructValue(ISheet sheet, PropertyInfo prop)
+        public static Output ReadOutput(this ISheet sheet, string model)
         {
-            var attr = prop.GetCustomAttributes<CellAttribute>().SingleOrDefault();
-            var cell = GetCell(sheet, attr);
-            if (cell == null)
+            var row = GetResultRow(model);
+            return new Output()
             {
-                return null;
-            }
-
-            if (prop.PropertyType == typeof(string))
-            {
-                return cell.StringCellValue;
-            }
-            if (prop.PropertyType == typeof(double))
-            {
-                return cell.NumericCellValue;
-            }
-
-            throw new InvalidOperationException("Unexpected property value: " + prop.PropertyType);
+                VoldoetDag = sheet.GetStringValue(new CellReference(row, 1))?.ToLower() == "voldoet",
+                VoldoetNacht = sheet.GetStringValue(new CellReference(row, 4))?.ToLower() == "voldoet",
+            };
         }
 
-        private static void SetClassValue(ISheet sheet, PropertyInfo prop, object obj)
+        private static int GetResultRow(string model) => model switch
         {
-            var value = prop.GetValue(obj, null);
-            if (value == null)
-            {
-                return;
-            }
-            MapObjectToSheet(sheet, prop.PropertyType, value);
-        }
+            "AP" => 69,
+            "Gg_3" => 85,
+            _ => 88
+        };
 
-
-        private static object GetClassValue(ISheet sheet, PropertyInfo prop)
-        {
-            return MapSheetToObject(sheet, prop.PropertyType);
-        }
-
-        private static ICell GetCell(ISheet sheet, CellAttribute attr)
-        {
-            if (attr == null)
-            {
-                return null;
-            }
-            var row = sheet.GetRow(attr.RowIndex);
-            return row?.GetCell(attr.ColumnIndex);
-        }
 
     }
 }

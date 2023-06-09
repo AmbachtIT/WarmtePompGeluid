@@ -10,19 +10,12 @@ namespace WarmtePompGeluid
 
 
 
-        public async Task Run(string path, Output input)
+        public async Task Run(IWorkbook workbook, Input input)
         {
-            
-            using (var stream = File.OpenRead(path))
-            {
-                var workbook = new XSSFWorkbook(stream);
-                Process(workbook, input);
-                await Save(path, workbook);
-
-            }
+            await Task.CompletedTask;
         }
 
-        private void Process(IWorkbook workbook, Output input)
+        private void Process(IWorkbook workbook, Input input)
         {
             var sheet = workbook.GetSheet(input.Model);
             if (sheet == null)
