@@ -55,7 +55,7 @@ namespace WarmtePompGeluid.Test
         }
 
 
-        private const string _path = @"C:\Projects\WarmtePompGeluid\main\WarmtePompGeluid.Wasm\data\WPAC-geluid_V2020_0.xlsx";
+        private const string _path = @"C:\Projects\WarmtePompGeluid\main\data\WPAC-geluid_V2020_0.xlsx";
 
     }
 }
