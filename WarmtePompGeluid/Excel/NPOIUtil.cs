@@ -72,29 +72,6 @@ namespace WarmtePompGeluid.Excel
         public static CellReference Below(this CellReference reference) => new CellReference(reference.Row + 1, reference.Col);
 
 
-        public static string GetStringValue(this ISheet sheet, CellReference reference) =>
-            sheet.GetCell(reference)?.GetStringValue();
-
-        public static string GetStringValue(this ICell cell) => cell.GetValue()?.ToString();
-
-        public static object GetValue(this ICell cell)
-        {
-            if (cell == null)
-            {
-                return null;
-            }
-
-            return cell.CellType switch
-            {
-                CellType.Blank => null,
-                CellType.Boolean => cell.BooleanCellValue,
-                CellType.Error => null,
-                CellType.Formula => cell.CellFormula,
-                CellType.Numeric => cell.NumericCellValue,
-                CellType.Unknown => "UNKNOWN",
-                _ => throw new InvalidOperationException()
-            };
-        }
 
     }
 }

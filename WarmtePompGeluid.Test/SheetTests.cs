@@ -13,9 +13,27 @@ namespace WarmtePompGeluid.Test
         [Test(), TestCaseSource(nameof(AllModels))]
         public async Task TestModelPass(string model)
         {
+            await TestModel(model, 10, true);
+        }
+
+
+        [Test(), TestCaseSource(nameof(AllModels))]
+        public async Task TestModelFail(string model)
+        {
+            await TestModel(model, 100, false);
+        }
+
+        private async Task TestModel(string model, double LwAMax, bool pass)
+        {
+            var productie = new GeluidsProductie()
+            {
+                LwAMax = LwAMax
+            };
             var input = new Input()
             {
                 Model = model,
+                DagProductie = productie,
+                AvondNachtProductie = productie,
                 PlanGegevens = new PlanGegevens()
                 {
                     Organisatie = "WarmtePompGeluid",
@@ -25,16 +43,18 @@ namespace WarmtePompGeluid.Test
             };
 
             var workbook = await NPOIUtil.Read(_path);
-            workbook.WriteToWorkbook(input);
+            var calculator = new Calculator();
 
-            var path2 = _path.Replace(".xlsx", $"-{model}-pass.xlsx");
+            var output = await calculator.Run(workbook, input);
+
+
+            var suffix = pass ? "pass" : "fail";
+            var path2 = _path.Replace(".xlsx", $"-{model}-{suffix}.xlsx");
             await workbook.Write(path2);
 
-            var output = workbook.ReadOutput(input);
-            Assert.That(output.VoldoetDag, Is.True);
-            Assert.That(output.VoldoetNacht, Is.True);
+            Assert.That(output.VoldoetDag, Is.EqualTo(pass));
+            Assert.That(output.VoldoetNacht, Is.EqualTo(pass));
         }
-
 
 
         private const string _path = @"C:\Projects\WarmtePompGeluid\main\data\WPAC-geluid_V2020_0.xlsx";

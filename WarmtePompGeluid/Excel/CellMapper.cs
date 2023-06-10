@@ -21,12 +21,25 @@ namespace WarmtePompGeluid.Excel
                 throw new InvalidOperationException();
             }
             sheet.WriteToSheet(input);
+            var evaluator = new CellEvaluator(workbook);
+            evaluator.EvaluateAll();
         }
 
 
-        public static void WriteToSheet(this ISheet sheet, Input input)
+        private static void WriteToSheet(this ISheet sheet, Input input)
         {
             sheet.WriteToSheet(input.PlanGegevens);
+            sheet.WriteToSheet(input.DagProductie, input.Model, 2);
+            sheet.WriteToSheet(input.AvondNachtProductie, input.Model, 5);
+        }
+
+
+        private static void WriteToSheet(this ISheet sheet, GeluidsProductie productie, string model, int column)
+        {
+            var reference = new CellReference(GetResultRow(model) - 4, column);
+            sheet.SetValue(reference, productie.LwAMax);
+            sheet.SetValue(reference = reference.Below(), productie.K1);
+            sheet.SetValue(reference = reference.Below(), productie.DOmkasting);
         }
 
         public static void WriteToSheet(this ISheet sheet, PlanGegevens gegevens)
@@ -46,16 +59,18 @@ namespace WarmtePompGeluid.Excel
                 throw new InvalidOperationException();
             }
 
-            return ReadOutput(sheet, input.Model);
+            var evaluator = new CellEvaluator(workbook);
+
+            return ReadOutput(sheet, evaluator, input.Model);
         }
 
-        public static Output ReadOutput(this ISheet sheet, string model)
+        public static Output ReadOutput(this ISheet sheet, CellEvaluator evaluator, string model)
         {
             var row = GetResultRow(model);
             return new Output()
             {
-                VoldoetDag = sheet.GetStringValue(new CellReference(row, 1))?.ToLower() == "voldoet",
-                VoldoetNacht = sheet.GetStringValue(new CellReference(row, 4))?.ToLower() == "voldoet",
+                VoldoetDag = evaluator.GetStringValue(sheet, new CellReference(row, 1))?.ToLower() == "voldoet",
+                VoldoetNacht = evaluator.GetStringValue(sheet, new CellReference(row, 4))?.ToLower() == "voldoet",
             };
         }
 

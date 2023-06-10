@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using WarmtePompGeluid.Excel;
 using WarmtePompGeluid.Model;
 
 namespace WarmtePompGeluid
@@ -10,27 +11,30 @@ namespace WarmtePompGeluid
 
 
 
-        public async Task Run(IWorkbook workbook, Input input)
+        public async Task<Output> Run(IWorkbook workbook, Input input)
         {
+            workbook.WriteToWorkbook(input);
+            RemoveOtherSheets(workbook, input);
+            var output = workbook.ReadOutput(input);
             await Task.CompletedTask;
+            return output;
         }
 
-        private void Process(IWorkbook workbook, Input input)
+        private static void RemoveOtherSheets(IWorkbook workbook, Input input)
         {
-            var sheet = workbook.GetSheet(input.Model);
-            if (sheet == null)
+            var s = 0;
+            while (s < workbook.NumberOfSheets)
             {
-                throw new InvalidOperationException("Sheet not found: " + input.Model);
+                var name = workbook.GetSheetName(s);
+                if (name == "Aanstuurblad" || name == input.Model)
+                {
+                    s++;
+                }
+                else
+                {
+                    workbook.RemoveSheetAt(s);
+                }
             }
-
         }
-
-        private async Task Save(string path, IWorkbook workbook)
-        {
-            await using var stream = File.Create(path.Replace(".xlsx", "-out.xlsx"));
-            workbook.Write(stream, false);
-        }
-
-
     }
 }
