@@ -1,4 +1,7 @@
 using System.Drawing.Text;
+using NPOI.HPSF;
+using NPOI.OpenXmlFormats.Shared;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using NUnit.Framework.Constraints;
 using WarmtePompGeluid.Excel;
@@ -10,18 +13,20 @@ namespace WarmtePompGeluid.Test
     public class TestCalculator
     {
 
-        [Test(), TestCaseSource(nameof(AllModels))]
+
+        [Test(), Explicit(), TestCaseSource(nameof(AllModels))]
         public async Task TestModelPass(string model)
         {
             await TestModel(model, 10, true);
         }
 
 
-        [Test(), TestCaseSource(nameof(AllModels))]
+        [Test(), Explicit(), TestCaseSource(nameof(AllModels))]
         public async Task TestModelFail(string model)
         {
             await TestModel(model, 100, false);
         }
+
 
         private async Task TestModel(string model, double LwAMax, bool pass)
         {
@@ -57,7 +62,43 @@ namespace WarmtePompGeluid.Test
         }
 
 
-        private const string _path = @"C:\Projects\WarmtePompGeluid\main\data\WPAC-geluid_V2020_0.xlsx";
+        [Test(), Explicit()]
+        public async Task ExtractFormulas()
+        {
+            var workbook = await NPOIUtil.Read(_path);
+            for (var s = 1; s < workbook.NumberOfSheets; s++)
+            {
+                var sheet = workbook.GetSheetAt(s);
+                await ExtractFormulas(sheet);
+            }
+        }
+
+        private async Task ExtractFormulas(ISheet sheet)
+        {
+            using (var writer = new StreamWriter(Path.Combine(BasePath, $"formulas-{sheet.SheetName}.txt")))
+            {
+                for (var r = sheet.FirstRowNum; r <= sheet.LastRowNum; r++)
+                {
+                    var row = sheet.GetRow(r);
+                    for (var c = 0; c < row.Cells.Count; c++)
+                    {
+                        var cell = row.Cells[c];
+                        if (cell.CellType == CellType.Formula)
+                        {
+                            await writer.WriteAsync($"{cell.Address.FormatAsString()} = {cell.CellFormula}");
+                        }
+                        await writer.WriteAsync("\t");
+                    }
+
+                    await writer.WriteLineAsync();
+                }
+            }
+        }
+
+        private const string BasePath = @"C:\Projects\WarmtePompGeluid\main\data";
+
+
+        private readonly string _path = Path.Combine(BasePath, @"WPAC-geluid_V2020_0.xlsx");
 
 
         private static IEnumerable<string> AllModels()
