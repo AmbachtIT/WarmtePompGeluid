@@ -31,7 +31,7 @@ namespace WarmtePompGeluid.Test
             };
             var input = new Input()
             {
-                Model = model,
+                Situatie = model,
                 DagProductie = productie,
                 AvondNachtProductie = productie,
                 PlanGegevens = new PlanGegevens()

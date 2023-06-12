@@ -10,7 +10,7 @@ namespace WarmtePompGeluid.Model
     public record class Input
     {
 
-        public string Model { get; set; } = "AP";
+        public string Situatie { get; set; } = "AP";
 
         public PlanGegevens PlanGegevens { get; init; } = new PlanGegevens();
 

@@ -26,7 +26,7 @@ namespace WarmtePompGeluid
             while (s < workbook.NumberOfSheets)
             {
                 var name = workbook.GetSheetName(s);
-                if (name == "Aanstuurblad" || name == input.Model)
+                if (name == "Aanstuurblad" || name == input.Situatie)
                 {
                     s++;
                 }

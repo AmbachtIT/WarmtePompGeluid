@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarmtePompGeluid.Wasm", "WarmtePompGeluid.Wasm\WarmtePompGeluid.Wasm.csproj", "{EA634371-473D-42EA-8B50-F269C9252696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid.Wasm", "WarmtePompGeluid.Wasm\WarmtePompGeluid.Wasm.csproj", "{EA634371-473D-42EA-8B50-F269C9252696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarmtePompGeluid", "WarmtePompGeluid\WarmtePompGeluid.csproj", "{526F9F44-3E1A-43B0-86CD-843BF798875C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid", "WarmtePompGeluid\WarmtePompGeluid.csproj", "{526F9F44-3E1A-43B0-86CD-843BF798875C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarmtePompGeluid.Test", "WarmtePompGeluid.Test\WarmtePompGeluid.Test.csproj", "{8F735957-AC79-4FE0-80FA-2ABF76EA2E0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid.Test", "WarmtePompGeluid.Test\WarmtePompGeluid.Test.csproj", "{8F735957-AC79-4FE0-80FA-2ABF76EA2E0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,7 +15,7 @@ namespace WarmtePompGeluid.Excel
 
         public static void WriteToWorkbook(this IWorkbook workbook, Input input)
         {
-            var sheet = workbook.GetSheet(input.Model);
+            var sheet = workbook.GetSheet(input.Situatie);
             if (sheet == null)
             {
                 throw new InvalidOperationException();
@@ -29,8 +29,8 @@ namespace WarmtePompGeluid.Excel
         private static void WriteToSheet(this ISheet sheet, Input input)
         {
             sheet.WriteToSheet(input.PlanGegevens);
-            sheet.WriteToSheet(input.DagProductie, input.Model, 2);
-            sheet.WriteToSheet(input.AvondNachtProductie, input.Model, 5);
+            sheet.WriteToSheet(input.DagProductie, input.Situatie, 2);
+            sheet.WriteToSheet(input.AvondNachtProductie, input.Situatie, 5);
         }
 
 
@@ -53,7 +53,7 @@ namespace WarmtePompGeluid.Excel
 
         public static Output ReadOutput(this IWorkbook workbook, Input input)
         {
-            var sheet = workbook.GetSheet(input.Model);
+            var sheet = workbook.GetSheet(input.Situatie);
             if (sheet == null)
             {
                 throw new InvalidOperationException();
@@ -61,7 +61,7 @@ namespace WarmtePompGeluid.Excel
 
             var evaluator = new CellEvaluator(workbook);
 
-            return ReadOutput(sheet, evaluator, input.Model);
+            return ReadOutput(sheet, evaluator, input.Situatie);
         }
 
         public static Output ReadOutput(this ISheet sheet, CellEvaluator evaluator, string model)

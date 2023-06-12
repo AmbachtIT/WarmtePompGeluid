@@ -1,0 +1,78 @@
+﻿@page "/calculator"
+@using WarmtePompGeluid.Wasm.Services
+
+<PageTitle>Calculator</PageTitle>
+@inject CalculatorService Service
+
+
+<CascadingValue Value="@_input">
+    <MudText Typo="Typo.h3" GutterBottom="true">Geluidsberekening buitenunit warmtepomp/airco</MudText>
+    <MudText Typo="Typo.h4">Situatie</MudText>
+    <SituatieSelector />
+
+    @if (!string.IsNullOrEmpty(_input.Situatie))
+    {
+        <MudText Typo="Typo.h4">Gegevens plan</MudText>
+        <PlanGegevensEditor Model="@_input.PlanGegevens" />
+    }
+</CascadingValue>
+
+<MudButton 
+    FullWidth="true" 
+    Variant="Variant.Filled" 
+    Color="Color.Primary" OnClick="@Calculate">Maak berekening</MudButton>
+    
+@if (_loading)
+{
+    <MudProgressCircular Indeterminate="true" Size="Size.Large" />
+
+} else if (_output != null)
+{
+    if (_output.Voldoet)
+    {
+        <MudAlert Severity="Severity.Success">De installatie voldoet aan de regelgeving</MudAlert>
+    }
+    else
+    {
+        <MudAlert Severity="Severity.Success">De installatie voldoet <b>niet </b>aan de regelgeving</MudAlert>
+
+    }
+}
+
+
+
+@code {
+
+
+    private readonly Input _input = new Input()
+    {
+        PlanGegevens = new PlanGegevens()
+        {
+            Organisatie = "Testorganisatie",
+            Omschrijving = "Testomschrijving",
+            Uitvoerder = "Testuitvoerder"
+        }
+    };
+
+
+    private Output _output = null;
+    private bool _loading = false;
+
+
+    private async Task Calculate()
+    {
+        try
+        {
+            _loading = true;
+            _output = null;
+            StateHasChanged();
+            _output = await Service.Calculate(_input);
+        }
+        finally
+        {
+            _loading = false;
+        }
+        await Task.CompletedTask;
+    }
+
+}

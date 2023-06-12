@@ -13,7 +13,6 @@ namespace WarmtePompGeluid.Model
         public bool VoldoetDag { get; set; }
 
         public bool VoldoetNacht { get; set; }
-
-
+        public bool Voldoet => VoldoetNacht && VoldoetDag;
     }
 }

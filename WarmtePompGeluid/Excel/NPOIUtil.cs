@@ -13,9 +13,9 @@ namespace WarmtePompGeluid.Excel
 {
     public static class NPOIUtil
     {
-        public static async Task<IWorkbook> Read(string path)
+
+        public static IWorkbook Read(Stream stream, string path)
         {
-            await using var stream = File.OpenRead(path);
             var info = new FileInfo(path);
             return info.Extension.ToLower() switch
             {
@@ -23,6 +23,12 @@ namespace WarmtePompGeluid.Excel
                 ".xls" => new HSSFWorkbook(stream),
                 _ => throw new InvalidOperationException()
             };
+        }
+
+        public static async Task<IWorkbook> Read(string path)
+        {
+            await using var stream = File.OpenRead(path);
+            return Read(stream, path);
         }
 
 
