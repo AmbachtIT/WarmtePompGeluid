@@ -70,6 +70,8 @@ namespace WarmtePompGeluid.Excel
             row.GetCell(colNr) ?? row.CreateCell(colNr);
 
 
+        public static ICell GetCell(this ISheet sheet, string reference) => sheet.GetCell(new CellReference(reference));
+
         public static ICell GetCell(this ISheet sheet, CellReference reference) =>
             sheet.GetRow(reference.Row)
                 ?.GetCell(reference.Col);

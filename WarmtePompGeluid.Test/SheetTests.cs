@@ -60,40 +60,7 @@ namespace WarmtePompGeluid.Test
             Assert.That(output.VoldoetDag, Is.EqualTo(pass));
             Assert.That(output.VoldoetNacht, Is.EqualTo(pass));
         }
-
-
-        [Test(), Explicit()]
-        public async Task ExtractFormulas()
-        {
-            var workbook = await NPOIUtil.Read(_path);
-            for (var s = 1; s < workbook.NumberOfSheets; s++)
-            {
-                var sheet = workbook.GetSheetAt(s);
-                await ExtractFormulas(sheet);
-            }
-        }
-
-        private async Task ExtractFormulas(ISheet sheet)
-        {
-            using (var writer = new StreamWriter(Path.Combine(BasePath, $"formulas-{sheet.SheetName}.txt")))
-            {
-                for (var r = sheet.FirstRowNum; r <= sheet.LastRowNum; r++)
-                {
-                    var row = sheet.GetRow(r);
-                    for (var c = 0; c < row.Cells.Count; c++)
-                    {
-                        var cell = row.Cells[c];
-                        if (cell.CellType == CellType.Formula)
-                        {
-                            await writer.WriteAsync($"{cell.Address.FormatAsString()} = {cell.CellFormula}");
-                        }
-                        await writer.WriteAsync("\t");
-                    }
-
-                    await writer.WriteLineAsync();
-                }
-            }
-        }
+        
 
         private const string BasePath = @"C:\Projects\WarmtePompGeluid\main\data";
 
