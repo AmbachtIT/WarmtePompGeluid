@@ -52,7 +52,7 @@ namespace WarmtePompGeluid.Model
         {
             Name = nameof(Gg_2A),
             Description = "Buitenunit op tuinhuis achter in tuin",
-            //ResultRow = 89
+            ResultRow = 89
 
         };
         public static readonly Situatie Gg_3 = new Situatie()
