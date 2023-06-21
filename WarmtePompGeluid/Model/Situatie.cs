@@ -59,7 +59,7 @@ namespace WarmtePompGeluid.Model
         {
             Name = nameof(Gg_3),
             Description = "Buitenunit op dak woning",
-            //ResultRow = 86
+            ResultRow = 86
         };
 
         
