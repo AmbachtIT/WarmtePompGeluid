@@ -77,7 +77,11 @@ namespace WarmtePompGeluid.Excel
                 ?.GetCell(reference.Col);
 
 
-        public static CellReference Below(this CellReference reference) => new CellReference(reference.Row + 1, reference.Col);
+
+
+        public static CellReference Translate(this CellReference reference, int deltaRows, int deltaColumns) => new CellReference(reference.Row + deltaRows, reference.Col + deltaColumns);
+
+        public static CellReference Below(this CellReference reference) => reference.Translate(1, 0);
 
 
 
