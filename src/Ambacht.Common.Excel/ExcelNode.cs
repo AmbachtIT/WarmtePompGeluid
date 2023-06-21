@@ -55,13 +55,13 @@ namespace Ambacht.Common.Excel
 
     }
 
-    public class ExcelOperatorNode : ExcelAstNode
+    public class ExcelBinaryOperatorNode : ExcelAstNode
     {
         public string Operator { get; }
         public ExcelAstNode Left { get; }
         public ExcelAstNode Right { get; }
 
-        public ExcelOperatorNode(string op, ExcelAstNode left, ExcelAstNode right)
+        public ExcelBinaryOperatorNode(string op, ExcelAstNode left, ExcelAstNode right)
         {
             Operator = op;
             Left = left;

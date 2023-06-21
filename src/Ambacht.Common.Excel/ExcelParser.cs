@@ -29,7 +29,7 @@ namespace Ambacht.Common.Excel
 
             // handle unary operators
             var ahead = LookAhead();
-            if (ahead.Type == ExcelTokenType.Operator && ahead.Value == "-")
+            if (ahead.Type == ExcelTokenType.Operator && IsUnaryOperator(ahead.Value))
             {
                 Consume(ExcelTokenType.Operator);
                 left = new ExcelUnaryOperatorNode(ahead.Value, ParseExpression(30));
@@ -50,11 +50,13 @@ namespace Ambacht.Common.Excel
 
                 var right = ParseExpression(opInfo.rightAssociative ? opInfo.precedence : opInfo.precedence + 1);
 
-                left = new ExcelOperatorNode(op.Value, left, right);
+                left = new ExcelBinaryOperatorNode(op.Value, left, right);
             }
 
             return left;
         }
+
+        private bool IsUnaryOperator(string value) => value == "-" || value == "+";
 
         private ExcelAstNode ParsePrimary()
         {

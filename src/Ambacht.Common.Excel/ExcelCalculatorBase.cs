@@ -7,7 +7,7 @@ using CellRange = System.Tuple<System.Tuple<int, int>, System.Tuple<int, int>>;
 
 namespace Ambacht.Common.Excel
 {
-    public abstract class ExcelCalculatorBase
+    public abstract partial class ExcelCalculatorBase
     {
 
         private readonly Dictionary<(int, int), object> _values = new Dictionary<(int, int), object>();
@@ -33,23 +33,7 @@ namespace Ambacht.Common.Excel
         }
 
 
-        protected object IF(bool condition, object resultTrue, object resultFalse) => condition ? resultTrue : resultFalse;
 
-        protected double ROUND(object value, object decimals) => Math.Round(Get<double>(value), Get<int>(decimals));
-        protected double LOG10(object value) => Math.Log10(Get<double>(value));
-        protected double MAX(((int, int), (int, int)) range) 
-        {
-            double? result = null;
-            foreach (var v in AllValues(range))
-            {
-                if (result == null || v > result)
-                {
-                    result = v;
-                }
-            }
-
-            return result ?? 0.0;
-        }
 
         protected IEnumerable<double> AllValues(((int, int), (int, int)) range)
         {
@@ -70,6 +54,10 @@ namespace Ambacht.Common.Excel
 
 
         protected double Negate(object value) => -Get<double>(value);
+
+        protected object Plus(object value) => Get<double>(value);
+
+
 
         protected double Add(object v1, object v2) => Get<double>(v1) + Get<double>(v2);
         protected double Subtract(object v1, object v2) => Get<double>(v1) - Get<double>(v2);

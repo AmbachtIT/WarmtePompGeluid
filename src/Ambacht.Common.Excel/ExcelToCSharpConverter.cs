@@ -126,7 +126,7 @@ public class ExcelToCSharpConverter
         {
             WriteUnaryOperator(builder, unary);
         }
-        else if (expression is ExcelOperatorNode op)
+        else if (expression is ExcelBinaryOperatorNode op)
         {
             WriteBinaryOperator(builder, op);
         }
@@ -173,7 +173,7 @@ public class ExcelToCSharpConverter
         builder.Append($")");
     }
 
-    private void WriteBinaryOperator(StringBuilder builder, ExcelOperatorNode op)
+    private void WriteBinaryOperator(StringBuilder builder, ExcelBinaryOperatorNode op)
     {
         if (op.Operator == ":")
         {
@@ -193,7 +193,7 @@ public class ExcelToCSharpConverter
         builder.Append($")");
     }
 
-    private void WriteRange(StringBuilder builder, ExcelOperatorNode op)
+    private void WriteRange(StringBuilder builder, ExcelBinaryOperatorNode op)
     {
         if (op.Left is ExcelVariableNode left && op.Right is ExcelVariableNode right)
         {
@@ -256,6 +256,7 @@ public class ExcelToCSharpConverter
     private Dictionary<string, string> _unaryFunctions = new Dictionary<string, string>()
     {
         {"-", "Negate" },
+        {"+", "Plus" },
     };
 
 }

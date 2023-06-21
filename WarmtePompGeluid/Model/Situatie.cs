@@ -39,22 +39,27 @@ namespace WarmtePompGeluid.Model
         public static readonly Situatie Gg_1 = new Situatie()
         {
             Name = nameof(Gg_1),
-            Description = "Buitenunit op maaiveld in tuin"
+            Description = "Buitenunit op maaiveld in tuin",
+            ResultRow = 89
         };
         public static readonly Situatie Gg_2 = new Situatie()
         {
             Name = nameof(Gg_2),
-            Description = "Buitenunit op aanbouw tegen woning"
+            Description = "Buitenunit op aanbouw tegen woning",
+            //ResultRow = 89
         };
         public static readonly Situatie Gg_2A = new Situatie()
         {
             Name = nameof(Gg_2A),
-            Description = "Buitenunit op tuinhuis achter in tuin"
+            Description = "Buitenunit op tuinhuis achter in tuin",
+            //ResultRow = 89
+
         };
         public static readonly Situatie Gg_3 = new Situatie()
         {
             Name = nameof(Gg_3),
-            Description = "Buitenunit op dak woning"
+            Description = "Buitenunit op dak woning",
+            //ResultRow = 86
         };
 
         
