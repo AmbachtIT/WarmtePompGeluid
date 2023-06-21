@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ambacht.Common.Excel;
 using NPOI.HSSF.Model;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.Formula;
@@ -27,7 +28,32 @@ namespace WarmtePompGeluid.Test
             for (var s = 1; s < workbook.NumberOfSheets; s++)
             {
                 var sheet = workbook.GetSheetAt(s);
+                await GenerateCode(sheet, s, workbook);
                 await ExtractFormulas(sheet, s, workbook);
+            }
+        }
+
+
+        private async Task GenerateCode(ISheet sheet, int s, IWorkbook workbook)
+        {
+            var situatie = Situatie.ByName(sheet.SheetName);
+            if (situatie == null)
+            {
+                return;
+            }
+            using (var writer = new StringWriter())
+            {
+                await new ExcelToCSharpConverter(workbook)
+                {
+                    ClassName = $"Calculator_{sheet.SheetName}",
+                    Namespace = "WarmtePompGeluid.Model.Generated",
+                }.Convert(writer, situatie.AllResultCells(), sheet);
+
+                await writer.FlushAsync();
+
+                await File.WriteAllTextAsync(
+                    Path.Combine(BasePath,
+                        $"WarmtePompGeluid\\Model\\Generated\\Calculator_{sheet.SheetName}.generated.cs"), writer.ToString());
             }
         }
 
@@ -43,8 +69,11 @@ namespace WarmtePompGeluid.Test
             foreach (var node in new ExcelExpressionTreeBuilder(workbook).Calculate(situatie.AllResultCells(), sheet))
             {
                 Console.WriteLine(node);
-            }
+                var builder = new StringBuilder();
+                node.Expression?.Write(builder, 0);
+                Console.WriteLine(builder);
 
+            }
             using (var writer = new StreamWriter(Path.Combine(BasePath, $"formulas-{sheet.SheetName}.txt")))
             {
                 for (var r = sheet.FirstRowNum; r <= sheet.LastRowNum; r++)
@@ -93,9 +122,9 @@ namespace WarmtePompGeluid.Test
 
 
 
-        private const string BasePath = @"C:\Projects\WarmtePompGeluid\main\data";
+        private const string BasePath = @"C:\Projects\WarmtePompGeluid\main";
 
-        private readonly string _path = Path.Combine(BasePath, @"WPAC-geluid_V2020_0.xlsx");
+        private readonly string _path = Path.Combine(BasePath, @"data\WPAC-geluid_V2020_0.xlsx");
 
     }
 }

@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WarmtePompGeluid.Excel
+namespace Ambacht.Common.Excel
 {
+
     public class ExcelToken
     {
 
@@ -19,5 +20,10 @@ namespace WarmtePompGeluid.Excel
                 ExcelTokenType.EndOfFormula => "",
                 _ => Value
             };
+
+        public bool IsOperator(string op)
+        {
+            return Type == ExcelTokenType.Operator && Value == op;
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 
-namespace WarmtePompGeluid.Excel
+namespace Ambacht.Common.Excel
 {
     public class ExcelExpressionTreeBuilder
     {
@@ -30,7 +30,7 @@ namespace WarmtePompGeluid.Excel
                     throw new InvalidOperationException("Circular reference detected");
                 }
 
-                visited.Add(next.Cell);
+                visited.Add(next.CellName);
                 list.Remove(next);
                 yield return next;
 
@@ -65,7 +65,9 @@ namespace WarmtePompGeluid.Excel
                 {
                     yield return new Node()
                     {
-                        Cell = current,
+                        CellName = current,
+                        CellType = cell?.CellType,
+                        IsInput = true,
                         Description = $"variable ({cell?.CellType})"
                     };
                 }
@@ -76,9 +78,10 @@ namespace WarmtePompGeluid.Excel
         {
             var result = new Node()
             {
-                Cell = cell.Address.FormatAsString(),
-                Tokens = ExcelLexer.Tokenize(cell.CellFormula)
+                CellName = cell.Address.FormatAsString(),
+                
             };
+            (result.Tokens, result.Expression) = ExcelExpressionParser.ParseExpression(cell.CellFormula);
 
             var description = new StringBuilder();
             foreach (var token in result.Tokens)
@@ -108,19 +111,26 @@ namespace WarmtePompGeluid.Excel
         public class Node
         {
 
-            public string Cell { get; set; }
+            public string CellName { get; set; }
+
+            public ExcelAstNode Expression { get; set; }
 
             public List<ExcelToken> Tokens { get; set; } = new();
 
             public string Description { get; set; }
 
+            public bool IsInput { get; set; }
 
-            public override string ToString() => $"{Cell} = {Description}";
+            public CellType? CellType { get; set; }
+
+            public override string ToString() => $"{CellName} = {Description}";
 
             public IEnumerable<string> GetReferencedCells() =>
                 Tokens
                     .Where(t => t.Type == ExcelTokenType.CellReference)
                     .Select(t => t.Value.Replace("$", ""));
+
+            
         }
     }
 }

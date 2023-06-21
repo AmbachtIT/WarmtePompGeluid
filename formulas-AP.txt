@@ -1,0 +1,73 @@
+												
+												
+												
+												
+	B5 = NOW()											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+											L16 = IF((B16<2),"Minimaal 2 dB(A) marge is aanbevolen","")	
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+		C35 = ((($B11-C20)^2)+(($B12-C21)^2)+(($B13-C22)^2))^0.5	D35 = ((($B11-D20)^2)+(($B12-D21)^2)+(($B13-D22)^2))^0.5	E35 = ((($B11-E20)^2)+(($B12-E21)^2)+(($B13-E22)^2))^0.5	F35 = ((($B11-F20)^2)+(($B12-F21)^2)+(($B13-F22)^2))^0.5	G35 = ((($B11-G20)^2)+(($B12-G21)^2)+(($B13-G22)^2))^0.5	H35 = ((($B11-H20)^2)+(($B12-H21)^2)+(($B13-H22)^2))^0.5	I35 = ((($B11-I20)^2)+(($B12-I21)^2)+(($B13-I22)^2))^0.5	J35 = ((($B11-J20)^2)+(($B12-J21)^2)+(($B13-J22)^2))^0.5			
+		C36 = IF(C23="J",5,IF(C23="n",0,"ERROR"))	D36 = IF(D23="J",5,IF(D23="n",0,"ERROR"))	E36 = IF(E23="J",5,IF(E23="n",0,"ERROR"))	F36 = IF(F23="J",5,IF(F23="n",0,"ERROR"))	G36 = IF(G23="J",5,IF(G23="n",0,"ERROR"))	H36 = IF(H23="J",5,IF(H23="n",0,"ERROR"))	I36 = IF(I23="J",5,IF(I23="n",0,"ERROR"))	J36 = IF(J23="J",5,IF(J23="n",0,"ERROR"))			
+		C37 = 10*LOG10(2/C25)*5/6	D37 = 10*LOG10(2/D25)*5/6	E37 = 10*LOG10(2/E25)*5/6	F37 = 10*LOG10(2/F25)*5/6	G37 = 10*LOG10(2/G25)*5/6	H37 = 10*LOG10(2/H25)*5/6	I37 = 10*LOG10(2/I25)*5/6	J37 = 10*LOG10(2/J25)*5/6			
+		C38 = 10*LOG10(2/C26)*5/6	D38 = 10*LOG10(2/D26)*5/6	E38 = 10*LOG10(2/E26)*5/6	F38 = 10*LOG10(2/F26)*5/6	G38 = 10*LOG10(2/G26)*5/6	H38 = 10*LOG10(2/H26)*5/6	I38 = 10*LOG10(2/I26)*5/6	J38 = 10*LOG10(2/J26)*5/6			
+		C39 = IF(C24="j",5,(IF(C24="n",0,"ERROR")))	D39 = IF(D24="j",5,(IF(D24="n",0,"ERROR")))	E39 = IF(E24="j",5,(IF(E24="n",0,"ERROR")))	F39 = IF(F24="j",5,(IF(F24="n",0,"ERROR")))	G39 = IF(G24="j",5,(IF(G24="n",0,"ERROR")))	H39 = IF(H24="j",5,(IF(H24="n",0,"ERROR")))	I39 = IF(I24="j",5,(IF(I24="n",0,"ERROR")))	J39 = IF(J24="j",5,(IF(J24="n",0,"ERROR")))			
+		C40 = 20*LOG10(C35)+9+C36-C37-C38-C39	D40 = 20*LOG10(D35)+9+D36-D37-D38-D39	E40 = 20*LOG10(E35)+9+E36-E37-E38-E39	F40 = 20*LOG10(F35)+9+F36-F37-F38-F39	G40 = 20*LOG10(G35)+9+G36-G37-G38-G39	H40 = 20*LOG10(H35)+9+H36-H37-H38-H39	I40 = 20*LOG10(I35)+9+I36-I37-I38-I39	J40 = 20*LOG10(J35)+9+J36-J37-J38-J39			
+		C41 = IF(C20<>"nvt",ROUND($B15-C40,0),"")	D41 = IF(D20<>"nvt",ROUND($B15-D40,0),"")	E41 = IF(E20<>"nvt",ROUND($B15-E40,0),"")	F41 = IF(F20<>"nvt",ROUND($B15-F40,0),"")	G41 = IF(G20<>"nvt",ROUND($B15-G40,0),"")	H41 = IF(H20<>"nvt",ROUND($B15-H40,0),"")	I41 = IF(I20<>"nvt",ROUND($B15-I40,0),"")	J41 = IF(J20<>"nvt",ROUND($B15-J40,0),"")	K41 = MAX(C41:J41)		
+		C42 = IF(C20<>"nvt",(IF(C24="n","invallend",IF(C24="j","incl.refl","FOUT"))),"")	D42 = IF(D20<>"nvt",(IF(D24="n","invallend",IF(D24="j","incl.refl","FOUT"))),"")	E42 = IF(E20<>"nvt",(IF(E24="n","invallend",IF(E24="j","incl.refl","FOUT"))),"")	F42 = IF(F20<>"nvt",(IF(F24="n","invallend",IF(F24="j","incl.refl","FOUT"))),"")	G42 = IF(G20<>"nvt",(IF(G24="n","invallend",IF(G24="j","incl.refl","FOUT"))),"")	H42 = IF(H20<>"nvt",(IF(H24="n","invallend",IF(H24="j","incl.refl","FOUT"))),"")	I42 = IF(I20<>"nvt",(IF(I24="n","invallend",IF(I24="j","incl.refl","FOUT"))),"")	J42 = IF(J20<>"nvt",(IF(J24="n","invallend",IF(J24="j","incl.refl","FOUT"))),"")			
+												
+		C44 = IF(C20<>"nvt",ROUND(45+C40,0),"")	D44 = IF(D20<>"nvt",ROUND(45+D40,0),"")	E44 = IF(E20<>"nvt",ROUND(45+E40,0),"")	F44 = IF(F20<>"nvt",ROUND(45+F40,0),"")	G44 = IF(G20<>"nvt",ROUND(45+G40,0),"")	H44 = IF(H20<>"nvt",ROUND(45+H40,0),"")	I44 = IF(I20<>"nvt",ROUND(45+I40,0),"")	J44 = IF(J20<>"nvt",ROUND(45+J40,0),"")			
+		C45 = IF(C20<>"nvt",ROUND(40+C40,0),"")	D45 = IF(D20<>"nvt",ROUND(40+D40,0),"")	E45 = IF(E20<>"nvt",ROUND(40+E40,0),"")	F45 = IF(F20<>"nvt",ROUND(40+F40,0),"")	G45 = IF(G20<>"nvt",ROUND(40+G40,0),"")	H45 = IF(H20<>"nvt",ROUND(40+H40,0),"")	I45 = IF(I20<>"nvt",ROUND(40+I40,0),"")	J45 = IF(J20<>"nvt",ROUND(40+J40,0),"")			
+		C46 = IF(C20<>"nvt",(-C44),-9999)	D46 = IF(D20<>"nvt",(-D44),-9999)	E46 = IF(E20<>"nvt",(-E44),-9999)	F46 = IF(F20<>"nvt",(-F44),-9999)	G46 = IF(G20<>"nvt",(-G44),-9999)	H46 = IF(H20<>"nvt",(-H44),-9999)	I46 = IF(I20<>"nvt",(-I44),-9999)	J46 = IF(J20<>"nvt",(-J44),-9999)			
+												
+		C48 = (-MAX(C46:J46))-B16										
+		C49 = C48-5										
+												
+												
+												
+												
+												
+		C55 = ROUND(C48,0)			F55 = ROUND(C49,0)							
+												
+												
+									
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+		C69 = C66+C67-C68			F69 = F66+F67-F68							
+	B70 = IF(C69<=C55,"VOLDOET","VOLDOET NIET")			E70 = IF(F69<=F55,"VOLDOET","VOLDOET NIET")								
+												
+												
+												

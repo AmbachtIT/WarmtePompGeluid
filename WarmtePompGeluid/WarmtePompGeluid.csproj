@@ -13,4 +13,8 @@
     <ProjectReference Include="..\src\Ambacht.Common.Excel\Ambacht.Common.Excel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\Generated\" />
+  </ItemGroup>
+
 </Project>

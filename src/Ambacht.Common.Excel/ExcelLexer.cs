@@ -5,14 +5,15 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace WarmtePompGeluid.Excel
+namespace Ambacht.Common.Excel
 {
     public class ExcelLexer
     {
-        private static readonly Regex NumberRegex = new Regex(@"^\d+(.\d+)?", RegexOptions.Compiled);
+        private static readonly Regex NumberRegex = new Regex(@"^\d+(\.\d+)?", RegexOptions.Compiled);
         private static readonly Regex CellReferenceRegex = new Regex(@"^(\$?[A-Za-z]+\$?\d+)", RegexOptions.Compiled);
-        private static readonly Regex FunctionRegex = new Regex(@"^[A-Za-z]+(?=\()", RegexOptions.Compiled);
-        private static readonly Regex OperatorRegex = new Regex(@"^(<=|>=|<>|<|>|=|\+|-|\*|/)", RegexOptions.Compiled);
+        private static readonly Regex FunctionRegex = new Regex(@"^[A-Za-z0-9]+(?=\()", RegexOptions.Compiled);
+        private static readonly Regex OperatorRegex = new Regex(@"^(<=|>=|<>|<|>|=|\+|-|\*|/|:|\^)", RegexOptions.Compiled);
+        private static readonly Regex StringRegex = new Regex("\".*?\"", RegexOptions.Compiled);
 
         public static List<ExcelToken> Tokenize(string formula)
         {
@@ -59,6 +60,11 @@ namespace WarmtePompGeluid.Excel
                     else if ((match = FunctionRegex.Match(formulaString)).Success)
                     {
                         tokens.Add(new ExcelToken { Type = ExcelTokenType.Function, Value = match.Value });
+                        formulaSpan = formulaSpan.Slice(match.Length).TrimStart();
+                    }
+                    else if ((match = StringRegex.Match(formulaString)).Success)
+                    {
+                        tokens.Add(new ExcelToken { Type = ExcelTokenType.String, Value = match.Value });
                         formulaSpan = formulaSpan.Slice(match.Length).TrimStart();
                     }
                     else

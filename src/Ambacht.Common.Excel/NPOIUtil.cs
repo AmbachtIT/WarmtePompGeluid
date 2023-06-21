@@ -9,7 +9,7 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using File = System.IO.File;
 
-namespace WarmtePompGeluid.Excel
+namespace Ambacht.Common.Excel
 {
     public static class NPOIUtil
     {
