@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ambacht.Common.Excel;
 using NPOI.SS.Util;
 
 namespace WarmtePompGeluid.Model
@@ -25,12 +26,34 @@ namespace WarmtePompGeluid.Model
             {
                 yield break;
             }
-            yield return new CellReference(ResultRow - 1, 1);
-            yield return new CellReference(ResultRow - 1, 4);
+
+            foreach (var col in new[] { 1, 4 })
+            {
+                yield return new CellReference(ResultRow - 15 - 1, col + 1);
+                yield return new CellReference(ResultRow - 1 - 1, col + 1);
+                yield return new CellReference(ResultRow - 1, col);
+            }
         }
 
 
-        public static readonly Situatie AP = new ApSituatie()
+        public virtual IEnumerable<(CellReference, ValueGenerator)> AllInputCells()
+        {
+            if (ResultRow == 0)
+            {
+                yield break;
+            }
+
+
+            foreach (var col in new[] { 2, 5 })
+            {
+                yield return (new CellReference(ResultRow - 4 - 1, col), new RangeValueGenerator(10, 100));
+                yield return (new CellReference(ResultRow - 3 - 1, col), new RangeValueGenerator(0, 3));
+                yield return (new CellReference(ResultRow - 2 - 1, col), new RangeValueGenerator(0, 3));
+            }
+        }
+
+
+        public static readonly Situatie AP = new Situatie_Ap()
         {
             Name = nameof(AP),
             Description = "Buitenunit bij/op appartementengebouw",
@@ -75,5 +98,7 @@ namespace WarmtePompGeluid.Model
         }
 
         public static Situatie ByName(string name) => All().SingleOrDefault(s => s.Name == name);
+
+
     }
 }

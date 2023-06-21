@@ -7,7 +7,7 @@ using NPOI.SS.Util;
 
 namespace WarmtePompGeluid.Model
 {
-    public record class ApSituatie : Situatie
+    public record class Situatie_Ap : Situatie
     {
         public override IEnumerable<CellReference> AllResultCells()
         {
@@ -16,7 +16,7 @@ namespace WarmtePompGeluid.Model
                 yield return address;
             }
 
-            for (var r = 43; r <= 44; r++)
+            foreach (var r in new[] { 40, 43, 44 })
             {
                 for (var c = 2; c < 10; c++)
                 {

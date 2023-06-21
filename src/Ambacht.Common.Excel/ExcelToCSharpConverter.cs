@@ -74,7 +74,7 @@ public class ExcelToCSharpConverter
         await writer.WriteLineAsync("\t/// <summary>");
         await writer.WriteLineAsync($"\t/// {item.Description}");
         await writer.WriteLineAsync("\t/// </summary>");
-        await writer.WriteLineAsync($"\tpublic {type} {item.CellName} {{");
+        await writer.WriteLineAsync($"\tpublic {type} {CellName(item.CellName)} {{");
         var cast = type == "object" ? "" : $"({type})";
         await writer.WriteLineAsync($"\t\tget => {cast}this[Addresses.{item.CellName}];");
         await writer.WriteLineAsync($"\t\tset => this[Addresses.{item.CellName}] = value;");

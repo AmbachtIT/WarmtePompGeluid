@@ -11,9 +11,84 @@ public class Calculator_AP : ExcelCalculatorBase {
 	/// <summary>
 	/// variable (Numeric)
 	/// </summary>
+	public double? C66 {
+		get => (double?)this[Addresses.C66];
+		set => this[Addresses.C66] = value;
+	}
+
+
+	/// <summary>
+	/// variable (Numeric)
+	/// </summary>
+	public double? C67 {
+		get => (double?)this[Addresses.C67];
+		set => this[Addresses.C67] = value;
+	}
+
+
+	/// <summary>
+	/// variable (Numeric)
+	/// </summary>
+	public double? C68 {
+		get => (double?)this[Addresses.C68];
+		set => this[Addresses.C68] = value;
+	}
+
+
+	/// <summary>
+	/// C66+C67-C68
+	/// </summary>
+	public object C69 => Subtract(Add(C66, C67), C68);
+
+
+	/// <summary>
+	/// variable (Numeric)
+	/// </summary>
+	public double? F66 {
+		get => (double?)this[Addresses.F66];
+		set => this[Addresses.F66] = value;
+	}
+
+
+	/// <summary>
+	/// variable (Numeric)
+	/// </summary>
+	public double? F67 {
+		get => (double?)this[Addresses.F67];
+		set => this[Addresses.F67] = value;
+	}
+
+
+	/// <summary>
+	/// variable (Numeric)
+	/// </summary>
+	public double? F68 {
+		get => (double?)this[Addresses.F68];
+		set => this[Addresses.F68] = value;
+	}
+
+
+	/// <summary>
+	/// F66+F67-F68
+	/// </summary>
+	public object F69 => Subtract(Add(F66, F67), F68);
+
+
+	/// <summary>
+	/// variable (Numeric)
+	/// </summary>
 	public double? C20 {
 		get => (double?)this[Addresses.C20];
 		set => this[Addresses.C20] = value;
+	}
+
+
+	/// <summary>
+	/// variable (Numeric)
+	/// </summary>
+	public double? B15 {
+		get => (double?)this[Addresses.B15];
+		set => this[Addresses.B15] = value;
 	}
 
 
@@ -78,72 +153,6 @@ public class Calculator_AP : ExcelCalculatorBase {
 		get => (string)this[Addresses.J20];
 		set => this[Addresses.J20] = value;
 	}
-
-
-	/// <summary>
-	/// variable (Numeric)
-	/// </summary>
-	public double? C66 {
-		get => (double?)this[Addresses.C66];
-		set => this[Addresses.C66] = value;
-	}
-
-
-	/// <summary>
-	/// variable (Numeric)
-	/// </summary>
-	public double? C67 {
-		get => (double?)this[Addresses.C67];
-		set => this[Addresses.C67] = value;
-	}
-
-
-	/// <summary>
-	/// variable (Numeric)
-	/// </summary>
-	public double? C68 {
-		get => (double?)this[Addresses.C68];
-		set => this[Addresses.C68] = value;
-	}
-
-
-	/// <summary>
-	/// C66+C67-C68
-	/// </summary>
-	public object C69 => Subtract(Add(C66, C67), C68);
-
-
-	/// <summary>
-	/// variable (Numeric)
-	/// </summary>
-	public double? F66 {
-		get => (double?)this[Addresses.F66];
-		set => this[Addresses.F66] = value;
-	}
-
-
-	/// <summary>
-	/// variable (Numeric)
-	/// </summary>
-	public double? F67 {
-		get => (double?)this[Addresses.F67];
-		set => this[Addresses.F67] = value;
-	}
-
-
-	/// <summary>
-	/// variable (Numeric)
-	/// </summary>
-	public double? F68 {
-		get => (double?)this[Addresses.F68];
-		set => this[Addresses.F68] = value;
-	}
-
-
-	/// <summary>
-	/// F66+F67-F68
-	/// </summary>
-	public object F69 => Subtract(Add(F66, F67), F68);
 
 
 	/// <summary>
@@ -273,6 +282,12 @@ public class Calculator_AP : ExcelCalculatorBase {
 
 
 	/// <summary>
+	/// IF(C20<>"nvt",ROUND(B15-C40,0),"")
+	/// </summary>
+	public object C41 => IF(!object.Equals(C20, "nvt"), ROUND(Subtract(B15, C40), 0), "");
+
+
+	/// <summary>
 	/// IF(C20<>"nvt",ROUND(45+C40,0),"")
 	/// </summary>
 	public object C44 => IF(!object.Equals(C20, "nvt"), ROUND(Add(45, C40), 0), "");
@@ -381,6 +396,12 @@ public class Calculator_AP : ExcelCalculatorBase {
 
 
 	/// <summary>
+	/// IF(D20<>"nvt",ROUND(B15-D40,0),"")
+	/// </summary>
+	public object D41 => IF(!object.Equals(D20, "nvt"), ROUND(Subtract(B15, D40), 0), "");
+
+
+	/// <summary>
 	/// IF(D20<>"nvt",ROUND(45+D40,0),"")
 	/// </summary>
 	public object D44 => IF(!object.Equals(D20, "nvt"), ROUND(Add(45, D40), 0), "");
@@ -480,6 +501,12 @@ public class Calculator_AP : ExcelCalculatorBase {
 	/// 20*LOG10(E35)+9+E36-E37-E38-E39
 	/// </summary>
 	public object E40 => Subtract(Subtract(Subtract(Add(Add(Multiply(20, LOG10(E35)), 9), E36), E37), E38), E39);
+
+
+	/// <summary>
+	/// IF(E20<>"nvt",ROUND(B15-E40,0),"")
+	/// </summary>
+	public object E41 => IF(!object.Equals(E20, "nvt"), ROUND(Subtract(B15, E40), 0), "");
 
 
 	/// <summary>
@@ -585,6 +612,12 @@ public class Calculator_AP : ExcelCalculatorBase {
 
 
 	/// <summary>
+	/// IF(F20<>"nvt",ROUND(B15-F40,0),"")
+	/// </summary>
+	public object F41 => IF(!object.Equals(F20, "nvt"), ROUND(Subtract(B15, F40), 0), "");
+
+
+	/// <summary>
 	/// IF(F20<>"nvt",ROUND(45+F40,0),"")
 	/// </summary>
 	public object F44 => IF(!object.Equals(F20, "nvt"), ROUND(Add(45, F40), 0), "");
@@ -684,6 +717,12 @@ public class Calculator_AP : ExcelCalculatorBase {
 	/// 20*LOG10(G35)+9+G36-G37-G38-G39
 	/// </summary>
 	public object G40 => Subtract(Subtract(Subtract(Add(Add(Multiply(20, LOG10(G35)), 9), G36), G37), G38), G39);
+
+
+	/// <summary>
+	/// IF(G20<>"nvt",ROUND(B15-G40,0),"")
+	/// </summary>
+	public object G41 => IF(!object.Equals(G20, "nvt"), ROUND(Subtract(B15, G40), 0), "");
 
 
 	/// <summary>
@@ -789,6 +828,12 @@ public class Calculator_AP : ExcelCalculatorBase {
 
 
 	/// <summary>
+	/// IF(H20<>"nvt",ROUND(B15-H40,0),"")
+	/// </summary>
+	public object H41 => IF(!object.Equals(H20, "nvt"), ROUND(Subtract(B15, H40), 0), "");
+
+
+	/// <summary>
 	/// IF(H20<>"nvt",ROUND(45+H40,0),"")
 	/// </summary>
 	public object H44 => IF(!object.Equals(H20, "nvt"), ROUND(Add(45, H40), 0), "");
@@ -888,6 +933,12 @@ public class Calculator_AP : ExcelCalculatorBase {
 	/// 20*LOG10(I35)+9+I36-I37-I38-I39
 	/// </summary>
 	public object I40 => Subtract(Subtract(Subtract(Add(Add(Multiply(20, LOG10(I35)), 9), I36), I37), I38), I39);
+
+
+	/// <summary>
+	/// IF(I20<>"nvt",ROUND(B15-I40,0),"")
+	/// </summary>
+	public object I41 => IF(!object.Equals(I20, "nvt"), ROUND(Subtract(B15, I40), 0), "");
 
 
 	/// <summary>
@@ -993,6 +1044,12 @@ public class Calculator_AP : ExcelCalculatorBase {
 
 
 	/// <summary>
+	/// IF(J20<>"nvt",ROUND(B15-J40,0),"")
+	/// </summary>
+	public object J41 => IF(!object.Equals(J20, "nvt"), ROUND(Subtract(B15, J40), 0), "");
+
+
+	/// <summary>
 	/// IF(J20<>"nvt",ROUND(45+J40,0),"")
 	/// </summary>
 	public object J44 => IF(!object.Equals(J20, "nvt"), ROUND(Add(45, J40), 0), "");
@@ -1050,6 +1107,7 @@ public class Calculator_AP : ExcelCalculatorBase {
 		public static readonly (int, int) B11 = new(10, 1);
 		public static readonly (int, int) B12 = new(11, 1);
 		public static readonly (int, int) B13 = new(12, 1);
+		public static readonly (int, int) B15 = new(14, 1);
 		public static readonly (int, int) B16 = new(15, 1);
 		public static readonly (int, int) C20 = new(19, 2);
 		public static readonly (int, int) C21 = new(20, 2);
