@@ -13,7 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\WarmtePompGeluid\WarmtePompGeluid.csproj" />
-		<ProjectReference Include="..\Shared\WarmtePompGeluid.Shared.csproj" />
+		<ProjectReference Include="..\..\Ambacht.Common.Excel\Ambacht.Common.Excel.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -10,8 +10,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\WarmtePompGeluid\WarmtePompGeluid.csproj" />
 		<ProjectReference Include="..\Client\WarmtePompGeluid.Client.csproj" />
-		<ProjectReference Include="..\Shared\WarmtePompGeluid.Shared.csproj" />
 	</ItemGroup>
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NPOI.SS.Util;
 
 namespace WarmtePompGeluid.Model
 {
@@ -13,11 +14,27 @@ namespace WarmtePompGeluid.Model
 
         public string Description { get; init; }
 
+        /// <summary>
+        /// Row containing result (voldoet/voldoet niet), 1-based
+        /// </summary>
+        public int ResultRow { get; init; }
 
-        public static readonly Situatie AP = new Situatie()
+        public virtual IEnumerable<CellReference> AllResultCells()
+        {
+            if (ResultRow == 0)
+            {
+                yield break;
+            }
+            yield return new CellReference(ResultRow - 1, 1);
+            yield return new CellReference(ResultRow - 1, 4);
+        }
+
+
+        public static readonly Situatie AP = new ApSituatie()
         {
             Name = nameof(AP),
-            Description = "Buitenunit bij/op appartementengebouw"
+            Description = "Buitenunit bij/op appartementengebouw",
+            ResultRow = 70
         };
         public static readonly Situatie Gg_1 = new Situatie()
         {
@@ -40,6 +57,8 @@ namespace WarmtePompGeluid.Model
             Description = "Buitenunit op dak woning"
         };
 
+        
+
 
         public static IEnumerable<Situatie> All()
         {
@@ -50,5 +69,6 @@ namespace WarmtePompGeluid.Model
             yield return AP;
         }
 
+        public static Situatie ByName(string name) => All().SingleOrDefault(s => s.Name == name);
     }
 }

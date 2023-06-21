@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+using Microsoft.AspNetCore.Mvc;
 using WarmtePompGeluid.Shared;
 
 namespace WarmtePompGeluid.Server.Controllers
@@ -33,3 +34,4 @@ namespace WarmtePompGeluid.Server.Controllers
         }
     }
 }
+*/

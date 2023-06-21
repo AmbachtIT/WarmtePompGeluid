@@ -18,9 +18,9 @@ namespace WarmtePompGeluid.Excel
         private readonly IWorkbook _workbook;
 
 
-        public IEnumerable<Node> Calculate(CellReference reference, ISheet sheet)
+        public IEnumerable<Node> Calculate(IEnumerable<CellReference> references, ISheet sheet)
         {
-            var list = new LinkedList<Node>(CalculateCore(reference, sheet));
+            var list = new LinkedList<Node>(CalculateCore(references, sheet));
             var visited = new HashSet<string>();
             while (list.Any())
             {
@@ -43,11 +43,15 @@ namespace WarmtePompGeluid.Excel
         }
 
 
-        private IEnumerable<Node> CalculateCore(CellReference reference, ISheet sheet)
+        private IEnumerable<Node> CalculateCore(IEnumerable<CellReference> references, ISheet sheet)
         {
             var visited = new HashSet<string>();
             var queue = new Queue<string>();
-            queue.Enqueue(reference.FormatAsString());
+            foreach (var reference in references)
+            {
+                queue.Enqueue(reference.FormatAsString());
+            }
+
             while (queue.TryDequeue(out var current))
             {
                 visited.Add(current);

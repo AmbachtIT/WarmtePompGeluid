@@ -11,6 +11,7 @@ using NPOI.SS.Formula.PTG;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using WarmtePompGeluid.Excel;
+using WarmtePompGeluid.Model;
 
 namespace WarmtePompGeluid.Test
 {
@@ -30,26 +31,16 @@ namespace WarmtePompGeluid.Test
             }
         }
 
-        private string GetCell(string sheetName) => sheetName switch
-        {
-            "Gg_1" => "B89",
-            "Gg_2" => "B89",
-            "Gg_2a" => "B89",
-            "Gg_3" => "B86",
-            "AP" => "B70",
-            _ => null
-        };
-
         private async Task ExtractFormulas(ISheet sheet, int s, IWorkbook workbook)
         {
             Console.WriteLine($"------ Sheet {sheet.SheetName} -------------------------");
-            var name = GetCell(sheet.SheetName);
-            if (string.IsNullOrEmpty(name))
+            var situatie = Situatie.ByName(sheet.SheetName);
+            if (situatie == null)
             {
                 return;
             }
-            var cellReference = new CellReference(name);
-            foreach (var node in new ExcelExpressionTreeBuilder(workbook).Calculate(cellReference, sheet).Reverse())
+
+            foreach (var node in new ExcelExpressionTreeBuilder(workbook).Calculate(situatie.AllResultCells(), sheet))
             {
                 Console.WriteLine(node);
             }
