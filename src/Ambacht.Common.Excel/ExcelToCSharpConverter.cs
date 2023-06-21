@@ -75,7 +75,8 @@ public class ExcelToCSharpConverter
         await writer.WriteLineAsync($"\t/// {item.Description}");
         await writer.WriteLineAsync("\t/// </summary>");
         await writer.WriteLineAsync($"\tpublic {type} {item.CellName} {{");
-        await writer.WriteLineAsync($"\t\tget => this[Addresses.{item.CellName}];");
+        var cast = type == "object" ? "" : $"({type})";
+        await writer.WriteLineAsync($"\t\tget => {cast}this[Addresses.{item.CellName}];");
         await writer.WriteLineAsync($"\t\tset => this[Addresses.{item.CellName}] = value;");
         await writer.WriteLineAsync($"\t}}");
         await writer.WriteLineAsync();
@@ -111,57 +112,117 @@ public class ExcelToCSharpConverter
     {
         if (expression is ExcelFunctionNode function)
         {
-            builder.Append(function.Name);
-            for (var i = 0; i < function.Arguments.Count; i++)
-            {
-                if (i == 0)
-                {
-                    builder.Append("(");
-                }
-                else
-                {
-                    builder.Append(", ");
-                }
-                WriteExpression(builder, function.Arguments[i]);
-            }
-
-            builder.Append(")");
+            WriteFunction(builder, function);
         }
-
-        if (expression is ExcelConstantNode<double> dbl)
+        else if (expression is ExcelConstantNode<double> dbl)
         {
             builder.Append(dbl.Value.ToString(CultureInfo.InvariantCulture));
         }
-        if (expression is ExcelConstantNode<string> str)
+        else if (expression is ExcelConstantNode<string> str)
         {
-            builder.Append($"\"{str.Value}\"");
+            builder.Append(str.Value);
         }
-        if (expression is ExcelUnaryOperatorNode unary)
+        else if (expression is ExcelUnaryOperatorNode unary)
         {
-            builder.Append(unary.Operator);
-            WriteExpression(builder, unary.Operand);
+            WriteUnaryOperator(builder, unary);
         }
-
-        if (expression is ExcelOperatorNode op)
+        else if (expression is ExcelOperatorNode op)
         {
-            WriteExpression(builder, op.Left);
-            builder.Append($" {op.Operator} ");
-            WriteExpression(builder, op.Right);
+            WriteBinaryOperator(builder, op);
         }
-
-        if (expression is ExcelVariableNode variable)
+        else if (expression is ExcelVariableNode variable)
         {
-            var formatted = variable.Name.Replace("$", "");
-            _addresses.Add(formatted);
-            builder.Append(formatted);
+            WriteVariable(builder, variable);
         }
-
-        if (expression is ExcelParenthesesNode parentheses)
+        else if (expression is ExcelParenthesesNode parentheses)
         {
             builder.Append("(");
             WriteExpression(builder, parentheses.Expression);
             builder.Append(")");
         }
+        else
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
+    private void WriteVariable(StringBuilder builder, ExcelVariableNode variable)
+    {
+        var formatted = CellName(variable.Name);
+        builder.Append(formatted);
+    }
+
+    private string CellName(string name)
+    {
+        var formatted = name.Replace("$", "");
+        _addresses.Add(formatted);
+        return formatted;
+    }
+
+    private void WriteUnaryOperator(StringBuilder builder, ExcelUnaryOperatorNode op)
+    {
+        if (!_unaryFunctions.TryGetValue(op.Operator, out var function))
+        {
+            throw new NotImplementedException($"Unexpected operator: {op.Operator}");
+        }
+        builder.Append(function);
+        builder.Append($"(");
+        WriteExpression(builder, op.Operand);
+        builder.Append($")");
+    }
+
+    private void WriteBinaryOperator(StringBuilder builder, ExcelOperatorNode op)
+    {
+        if (op.Operator == ":")
+        {
+            WriteRange(builder, op);
+            return;
+        }
+        if (!_binaryFunctions.TryGetValue(op.Operator, out var function))
+        {
+            throw new NotImplementedException($"Unexpected operator: {op.Operator}");
+        }
+
+        builder.Append(function);
+        builder.Append($"(");
+        WriteExpression(builder, op.Left);
+        builder.Append($", ");
+        WriteExpression(builder, op.Right);
+        builder.Append($")");
+    }
+
+    private void WriteRange(StringBuilder builder, ExcelOperatorNode op)
+    {
+        if (op.Left is ExcelVariableNode left && op.Right is ExcelVariableNode right)
+        {
+            builder.Append($"(Addresses.{CellName(left.Name)}, Addresses.{CellName(right.Name)})");
+        }
+        else
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    private void WriteFunction(StringBuilder builder, ExcelFunctionNode function)
+    {
+        builder.Append(function.Name);
+        for (var i = 0; i < function.Arguments.Count; i++)
+        {
+            if (i == 0)
+            {
+                builder.Append("(");
+            }
+            else
+            {
+                builder.Append(", ");
+            }
+
+            WriteExpression(builder, function.Arguments[i]);
+        }
+
+        builder.Append(")");
     }
 
     private async Task WriteAddresses(TextWriter writer)
@@ -176,5 +237,25 @@ public class ExcelToCSharpConverter
         await writer.WriteLineAsync($"\t}}");
 
     }
+
+    private Dictionary<string, string> _binaryFunctions = new Dictionary<string, string>()
+    {
+        {"+", "Add" },
+        {"-", "Subtract" },
+        {"*", "Multiply" },
+        {"/", "Divide" },
+        {"^", "Pow" },
+        {"<", "Less" },
+        {"<=", "LessOrEqual" },
+        {">", "Greater" },
+        {">=", "GreaterOrEqual" },
+        {"=", "object.Equals" },
+        {"<>", "!object.Equals" },
+    };
+
+    private Dictionary<string, string> _unaryFunctions = new Dictionary<string, string>()
+    {
+        {"-", "Negate" },
+    };
 
 }
