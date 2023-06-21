@@ -21,6 +21,8 @@ namespace Ambacht.Common.Excel
 
         protected double SQRT(object value) => Math.Sqrt(Get<double>(value));
 
+        protected double PI() => Math.PI;
+
 
         protected double? MAX(object v1, object v2)
         {

@@ -208,17 +208,13 @@ public class ExcelToCSharpConverter
     private void WriteFunction(StringBuilder builder, ExcelFunctionNode function)
     {
         builder.Append(function.Name);
+        builder.Append("(");
         for (var i = 0; i < function.Arguments.Count; i++)
         {
-            if (i == 0)
-            {
-                builder.Append("(");
-            }
-            else
+            if (i > 0)
             {
                 builder.Append(", ");
             }
-
             WriteExpression(builder, function.Arguments[i]);
         }
 
