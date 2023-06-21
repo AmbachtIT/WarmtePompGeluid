@@ -1,0 +1,9 @@
+﻿<MudTextField @bind-Text="@Model.Organisatie" Label="Organisatie" T="string" />
+<MudTextField @bind-Text="@Model.Uitvoerder" Label="Uitvoerder" T="string" />
+<MudTextField @bind-Text="@Model.Omschrijving" Label="Omschrijving" T="string" />
+
+@code {
+
+    [Parameter()]
+    public PlanGegevens Model { get; set; } = new PlanGegevens();
+}

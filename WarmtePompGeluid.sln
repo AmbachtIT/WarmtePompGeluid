@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid.Wasm", "WarmtePompGeluid.Wasm\WarmtePompGeluid.Wasm.csproj", "{EA634371-473D-42EA-8B50-F269C9252696}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid", "WarmtePompGeluid\WarmtePompGeluid.csproj", "{526F9F44-3E1A-43B0-86CD-843BF798875C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid.Test", "WarmtePompGeluid.Test\WarmtePompGeluid.Test.csproj", "{8F735957-AC79-4FE0-80FA-2ABF76EA2E0C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid.Client", "src\WarmtePompGeluid\Client\WarmtePompGeluid.Client.csproj", "{F09EDC8C-1E96-4D0D-9992-5A3895C0054F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid.Server", "src\WarmtePompGeluid\Server\WarmtePompGeluid.Server.csproj", "{92780714-0AAF-484F-B4B8-7CB27D2ADDBA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarmtePompGeluid.Shared", "src\WarmtePompGeluid\Shared\WarmtePompGeluid.Shared.csproj", "{12AF5420-ADC6-4961-A28C-2B40794BD3E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EA634371-473D-42EA-8B50-F269C9252696}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA634371-473D-42EA-8B50-F269C9252696}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA634371-473D-42EA-8B50-F269C9252696}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA634371-473D-42EA-8B50-F269C9252696}.Release|Any CPU.Build.0 = Release|Any CPU
 		{526F9F44-3E1A-43B0-86CD-843BF798875C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{526F9F44-3E1A-43B0-86CD-843BF798875C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{526F9F44-3E1A-43B0-86CD-843BF798875C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +27,18 @@ Global
 		{8F735957-AC79-4FE0-80FA-2ABF76EA2E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F735957-AC79-4FE0-80FA-2ABF76EA2E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F735957-AC79-4FE0-80FA-2ABF76EA2E0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F09EDC8C-1E96-4D0D-9992-5A3895C0054F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F09EDC8C-1E96-4D0D-9992-5A3895C0054F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F09EDC8C-1E96-4D0D-9992-5A3895C0054F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F09EDC8C-1E96-4D0D-9992-5A3895C0054F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92780714-0AAF-484F-B4B8-7CB27D2ADDBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92780714-0AAF-484F-B4B8-7CB27D2ADDBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92780714-0AAF-484F-B4B8-7CB27D2ADDBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92780714-0AAF-484F-B4B8-7CB27D2ADDBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12AF5420-ADC6-4961-A28C-2B40794BD3E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12AF5420-ADC6-4961-A28C-2B40794BD3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12AF5420-ADC6-4961-A28C-2B40794BD3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12AF5420-ADC6-4961-A28C-2B40794BD3E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

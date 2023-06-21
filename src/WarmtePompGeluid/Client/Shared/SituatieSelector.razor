@@ -1,0 +1,29 @@
+﻿@if (string.IsNullOrEmpty(Input?.Situatie))
+{
+    foreach (var situatie in Situatie.All())
+    {
+        <MudCard>
+            <MudCardHeader>
+                @situatie.Name
+            </MudCardHeader>
+            <MudCardContent>
+                @situatie.Description
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Variant="Variant.Filled" OnClick="@(async () => await Select(situatie))"></MudButton>
+            </MudCardActions>
+        </MudCard>
+    }
+}
+
+@code {
+    [CascadingParameter()]
+    public Input Input { get; set; }
+
+
+    private async Task Select(Situatie situatie)
+    {
+        Input.Situatie = situatie.Name;
+        await Task.CompletedTask;
+    }
+}
