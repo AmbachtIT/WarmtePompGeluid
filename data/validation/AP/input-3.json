@@ -1,0 +1,62 @@
+{
+  "situatie": "AP",
+  "planGegevens": {
+    "omschrijving": "3"
+  },
+  "bronPositie": {},
+  "ontvangstPosities": [
+    {
+      "positie": {},
+      "isBuitenUnitAfgeschermd": false,
+      "isRaamDeurMetBalkon": false,
+      "qGeluidsBron": 1,
+      "qOntvanger": 0.5
+    },
+    {
+      "positie": {},
+      "isBuitenUnitAfgeschermd": false,
+      "isRaamDeurMetBalkon": false,
+      "qGeluidsBron": 0.5,
+      "qOntvanger": 0.5
+    },
+    {
+      "positie": {},
+      "isBuitenUnitAfgeschermd": false,
+      "isRaamDeurMetBalkon": true,
+      "qGeluidsBron": 0.5,
+      "qOntvanger": 2
+    },
+    {
+      "positie": {},
+      "isBuitenUnitAfgeschermd": false,
+      "isRaamDeurMetBalkon": false,
+      "qGeluidsBron": 2,
+      "qOntvanger": 1
+    }
+  ],
+  "perceel": {
+    "breedte": 0,
+    "diepte": 0,
+    "linksWoonBestemming": false,
+    "rechtsWoonBestemming": false,
+    "bovenWoonbestemming": false
+  },
+  "gevel": {
+    "xh1": 0,
+    "xh2": 0
+  },
+  "installatie": {
+    "maximaalVermogen": 0,
+    "maximaalBegrenstVermogen": 0
+  },
+  "dagProductie": {
+    "lwAMax": 50,
+    "k1": 2,
+    "dOmkasting": 2
+  },
+  "avondNachtProductie": {
+    "lwAMax": 49,
+    "k1": 2,
+    "dOmkasting": 2
+  }
+}

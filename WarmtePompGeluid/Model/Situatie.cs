@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Ambacht.Common.Excel;
@@ -19,6 +20,52 @@ namespace WarmtePompGeluid.Model
         /// Row containing result (voldoet/voldoet niet), 1-based
         /// </summary>
         public int ResultRow { get; init; }
+
+
+        public virtual Input GenerateInput(Random random)
+        {
+            var result = new Input()
+            {
+                DagProductie = GenerateProductie(random),
+            };
+            result.AvondNachtProductie = result.DagProductie with { LwAMax = result.DagProductie.LwAMax - random.Next(0, 6) };
+            return result;
+        }
+
+
+
+        protected double GenerateQ(Random random)
+        {
+            var q = random.NextDouble();
+            if (q < 0.5)
+            {
+                return 2;
+            }
+
+            if (q < 0.75)
+            {
+                return 1;
+            }
+
+            return 0.5;
+        }
+
+
+        protected Vector3 GenerateVector(Random random)
+        {
+            return new Vector3(
+                (float)(random.NextDouble() * 2 - 1),
+                (float)(random.NextDouble() * 2 - 1),
+                (float)(random.NextDouble() * 2 - 1)
+            );
+        }
+        private GeluidsProductie GenerateProductie(Random random) => new GeluidsProductie()
+        {
+            LwAMax = random.Next(45, 65),
+            DOmkasting = random.Next(0, 3),
+            K1 = random.Next(0, 3)
+        };
+
 
         public virtual IEnumerable<CellReference> AllResultCells()
         {

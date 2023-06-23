@@ -9,13 +9,11 @@ namespace WarmtePompGeluid.Model
     public record class GeluidsProductie
     {
 
-        public double LwAMax { get; set; }
+        public double LwAMax { get; init; }
 
-        public double K1 { get; set; }
+        public double K1 { get; init; }
 
-        public double DOmkasting { get; set; }
-
-        public double LwATotaal => LwAMax + K1 - DOmkasting;
+        public double DOmkasting { get; init; }
 
     }
 }

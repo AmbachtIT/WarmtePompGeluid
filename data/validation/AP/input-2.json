@@ -1,0 +1,33 @@
+{
+  "situatie": "AP",
+  "planGegevens": {
+    "omschrijving": "2"
+  },
+  "bronPositie": {},
+  "ontvangstPosities": [],
+  "perceel": {
+    "breedte": 0,
+    "diepte": 0,
+    "linksWoonBestemming": false,
+    "rechtsWoonBestemming": false,
+    "bovenWoonbestemming": false
+  },
+  "gevel": {
+    "xh1": 0,
+    "xh2": 0
+  },
+  "installatie": {
+    "maximaalVermogen": 0,
+    "maximaalBegrenstVermogen": 0
+  },
+  "dagProductie": {
+    "lwAMax": 60,
+    "k1": 0,
+    "dOmkasting": 1
+  },
+  "avondNachtProductie": {
+    "lwAMax": 55,
+    "k1": 0,
+    "dOmkasting": 1
+  }
+}

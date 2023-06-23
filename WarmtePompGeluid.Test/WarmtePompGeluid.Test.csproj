@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\Ambacht.Common.Excel\Ambacht.Common.Excel.csproj" />
+    <ProjectReference Include="..\src\Ambacht.Common\Ambacht.Common.csproj" />
     <ProjectReference Include="..\WarmtePompGeluid\WarmtePompGeluid.csproj" />
   </ItemGroup>
 
