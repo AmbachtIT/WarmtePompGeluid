@@ -1,10 +1,18 @@
 {
   "situatie": "AP",
   "planGegevens": {
-    "omschrijving": "2"
+    "omschrijving": "ok"
   },
   "bronPositie": {},
-  "ontvangstPosities": [],
+  "ontvangstPosities": [
+    {
+      "positie": {},
+      "isBuitenUnitAfgeschermd": false,
+      "isRaamDeurMetBalkon": true,
+      "qGeluidsBron": 2,
+      "qOntvanger": 2
+    }
+  ],
   "perceel": {
     "breedte": 0,
     "diepte": 0,
@@ -21,13 +29,13 @@
     "maximaalBegrenstVermogen": 0
   },
   "dagProductie": {
-    "lwAMax": 60,
+    "lwAMax": 0,
     "k1": 0,
-    "dOmkasting": 1
+    "dOmkasting": 0
   },
   "avondNachtProductie": {
-    "lwAMax": 55,
+    "lwAMax": 0,
     "k1": 0,
-    "dOmkasting": 1
+    "dOmkasting": 0
   }
 }
