@@ -27,7 +27,10 @@ namespace Ambacht.Common.Serialization
             options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             options.Converters.Add(new JsonStringEnumConverter());
+            options.Converters.Add(new Vector3Converter());
             options.WriteIndented = indented;
+            options.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals |
+                                     JsonNumberHandling.AllowReadingFromString;
             return options;
         }
 

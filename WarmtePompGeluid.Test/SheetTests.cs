@@ -39,7 +39,7 @@ namespace WarmtePompGeluid.Test
             {
                 Situatie = model,
                 DagProductie = productie,
-                AvondNachtProductie = productie,
+                NachtProductie = productie,
                 PlanGegevens = new PlanGegevens()
                 {
                     Organisatie = "WarmtePompGeluid",
@@ -49,17 +49,17 @@ namespace WarmtePompGeluid.Test
             };
 
             var workbook = await NPOIUtil.Read(_path);
-            var calculator = new Calculator();
+            var calculator = Calculator.CreateExcel(workbook);
 
-            var output = await calculator.Run(workbook, input);
+            var output = await calculator.Run(input);
 
 
             var suffix = pass ? "pass" : "fail";
             var path2 = _path.Replace(".xlsx", $"-{model}-{suffix}.xlsx");
             await workbook.Write(path2);
 
-            Assert.That(output.VoldoetDag, Is.EqualTo(pass));
-            Assert.That(output.VoldoetNacht, Is.EqualTo(pass));
+            Assert.That(output.Dag.Voldoet, Is.EqualTo(pass));
+            Assert.That(output.Nacht.Voldoet, Is.EqualTo(pass));
         }
         
 

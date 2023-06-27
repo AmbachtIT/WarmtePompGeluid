@@ -27,7 +27,7 @@ namespace WarmtePompGeluid.Model
 
         public GeluidsProductie DagProductie { get; set; } = new GeluidsProductie();
 
-        public GeluidsProductie AvondNachtProductie { get; set; } = new GeluidsProductie();
+        public GeluidsProductie NachtProductie { get; set; } = new GeluidsProductie();
 
 
     }

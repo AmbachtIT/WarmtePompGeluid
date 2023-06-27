@@ -9,10 +9,15 @@ namespace WarmtePompGeluid.Model
     public record class Output
     {
 
+        public List<OntvangstPositieOutput> OntvangstPosities { get; set; } = new List<OntvangstPositieOutput>();
 
-        public bool VoldoetDag { get; set; }
+        public DagDeelOutput Dag { get; set; } = new DagDeelOutput();
 
-        public bool VoldoetNacht { get; set; }
-        public bool Voldoet => VoldoetNacht && VoldoetDag;
+        public DagDeelOutput Nacht { get; set; } = new DagDeelOutput();
+
+        public bool Voldoet => Dag.Voldoet && Nacht.Voldoet;
+
+        public Dictionary<string, object> AdditionalCells { get; set; }
+
     }
 }

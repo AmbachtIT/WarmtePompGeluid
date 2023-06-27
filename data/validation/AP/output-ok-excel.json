@@ -1,5 +1,13 @@
 {
-  "voldoetDag": true,
-  "voldoetNacht": true,
+  "dag": {
+    "lwAMaxBerekend": 56,
+    "lwATotaal": 0,
+    "voldoet": true
+  },
+  "nacht": {
+    "lwAMaxBerekend": 51,
+    "lwATotaal": 0,
+    "voldoet": true
+  },
   "voldoet": true
 }

@@ -1,0 +1,49 @@
+{
+  "situatie": "AP",
+  "planGegevens": {
+    "omschrijving": "single-window-2m"
+  },
+  "bronPositie": [
+    0,
+    0,
+    5
+  ],
+  "ontvangstPosities": [
+    {
+      "positie": [
+        2,
+        0,
+        5
+      ],
+      "isBuitenUnitAfgeschermd": false,
+      "isRaamDeurMetBalkon": true,
+      "qGeluidsBron": 2,
+      "qOntvanger": 2
+    }
+  ],
+  "perceel": {
+    "breedte": 0,
+    "diepte": 0,
+    "linksWoonBestemming": false,
+    "rechtsWoonBestemming": false,
+    "bovenWoonbestemming": false
+  },
+  "gevel": {
+    "xh1": 0,
+    "xh2": 0
+  },
+  "installatie": {
+    "maximaalVermogen": 0,
+    "maximaalBegrenstVermogen": 0
+  },
+  "dagProductie": {
+    "lwAMax": 58,
+    "k1": 0,
+    "dOmkasting": 0
+  },
+  "nachtProductie": {
+    "lwAMax": 55,
+    "k1": 0,
+    "dOmkasting": 0
+  }
+}

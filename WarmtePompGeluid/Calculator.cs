@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Ambacht.Common.Excel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using WarmtePompGeluid.Excel;
@@ -6,35 +7,19 @@ using WarmtePompGeluid.Model;
 
 namespace WarmtePompGeluid
 {
-    public class Calculator
+    public abstract class Calculator
     {
 
+        public ISheetAdapter SheetAdapter { get; internal set; }
+
+        public static Calculator CreateExcel(IWorkbook workbook = null) => new ExcelCalculator(workbook);
+
+        public static Calculator CreateCSharp() => new CSharpCalculator();
 
 
-        public async Task<Output> Run(IWorkbook workbook, Input input)
-        {
-            workbook.WriteToWorkbook(input);
-            RemoveOtherSheets(workbook, input);
-            var output = workbook.ReadOutput(input);
-            await Task.CompletedTask;
-            return output;
-        }
+        public abstract Task<Output> Run(Input input, CancellationToken token = default);
 
-        private static void RemoveOtherSheets(IWorkbook workbook, Input input)
-        {
-            var s = 0;
-            while (s < workbook.NumberOfSheets)
-            {
-                var name = workbook.GetSheetName(s);
-                if (name == "Aanstuurblad" || name == input.Situatie)
-                {
-                    s++;
-                }
-                else
-                {
-                    workbook.RemoveSheetAt(s);
-                }
-            }
-        }
+        
     }
+
 }

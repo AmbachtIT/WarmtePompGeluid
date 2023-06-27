@@ -17,31 +17,77 @@ namespace WarmtePompGeluid.Test
     {
 
         [Test(), TestCaseSource(nameof(AllScenarios)), Explicit()]
-        public async Task Serialize(Input input)
+        public async Task RunExcel(Input input)
         {
-            var outputPath = GetOutputPath(input, "input");
+            await Serialize(input);
+            var excelPath = Path.Combine(SourceRoot, "data", @"WPAC-geluid_V2020_0.xlsx");
+            var workbook = await NPOIUtil.Read(excelPath);
+            var calculator = Calculator.CreateExcel(workbook);
+
+            var output = await calculator.Run(input);
+            AddAdditionalInfo(output, calculator);
+
+            await workbook.Write(GetOutputPath(input, "output", ".xlsx"));
+            var json = _serializer.SerializeObject(output);
+            await File.WriteAllTextAsync(GetOutputPath(input, "output", "-excel.json"), json);
+
+        }
+
+        private void AddAdditionalInfo(Output output, Calculator calculator)
+        {
+            output.AdditionalCells = new Dictionary<string, object>();
+            foreach (var addr in new[] { "C35", "C36", "C37", "C38", "C39", "C40" })
+            {
+                output.AdditionalCells.Add(addr, calculator.SheetAdapter.GetValue(new CellRef(addr)));
+            }
+        }
+
+
+        [Test(), TestCaseSource(nameof(AllScenarios)), Explicit()]
+        public async Task RunCSharp(Input input)
+        {
+            await Serialize(input);
+            var calculator = Calculator.CreateCSharp();
+
+            var output = await calculator.Run(input);
+            AddAdditionalInfo(output, calculator);
+
+            var adapter = calculator.SheetAdapter;
+
+            Console.Write(adapter.GetValue(new("B11")));
+            Console.Write("-");
+            Console.Write(adapter.GetValue(new("C20")));
+            Console.WriteLine();
+
+            Console.Write(adapter.GetValue(new("B11")));
+            Console.Write("-");
+            Console.Write(adapter.GetValue(new("C21")));
+            Console.WriteLine();
+
+            Console.Write(adapter.GetValue(new("B13")));
+            Console.Write("-");
+            Console.Write(adapter.GetValue(new("C22")));
+            Console.WriteLine();
+
+
+            Console.WriteLine(adapter.GetValue(new("C35")));
+
+            var json = _serializer.SerializeObject(output);
+            await File.WriteAllTextAsync(GetOutputPath(input, "output", "-csharp.json"), json);
+        }
+
+
+
+
+        private async Task Serialize(Input input)
+        {
+            var outputPath = GetOutputPath(input, "input", ".json");
 
             var json = _serializer.SerializeObject(input);
             await File.WriteAllTextAsync(outputPath, json);
         }
 
 
-        [Test(), TestCaseSource(nameof(AllScenarios)), Explicit()]
-        public async Task RunExcel(Input input)
-        {
-            var excelPath = Path.Combine(SourceRoot, "data", @"WPAC-geluid_V2020_0.xlsx");
-            var workbook = await NPOIUtil.Read(excelPath);
-            var calculator = new Calculator();
-
-            var output = await calculator.Run(workbook, input);
-
-            var outputPath = GetOutputPath(input, "output", "-excel");
-
-
-            var json = _serializer.SerializeObject(output);
-            await File.WriteAllTextAsync(outputPath, json);
-
-        }
 
         private string GetOutputPath(Input input, string prefix, string suffix = "")
         {
@@ -51,7 +97,7 @@ namespace WarmtePompGeluid.Test
             {
                 Directory.CreateDirectory(dir);
             }
-            var outputPath = Path.Combine(dir, $"{prefix}-{input.PlanGegevens.Omschrijving}{suffix}.json");
+            var outputPath = Path.Combine(dir, $"{prefix}-{input.PlanGegevens.Omschrijving}{suffix}");
             return outputPath;
         }
 

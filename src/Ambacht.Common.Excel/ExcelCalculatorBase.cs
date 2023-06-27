@@ -10,67 +10,126 @@ namespace Ambacht.Common.Excel
     public abstract partial class ExcelCalculatorBase
     {
 
-        private readonly Dictionary<(int, int), object> _values = new Dictionary<(int, int), object>();
+        protected ExcelCalculatorBase()
+        {
+            AddFormulas();
+        }
+
+        private void AddFormulas()
+        {
+            foreach (var kv in GetFormulas())
+            {
+                _formulas.Add(new CellRef(kv.Key), kv.Value);
+            }
+        }
+
+        protected virtual IEnumerable<KeyValuePair<string, Func<object>>> GetFormulas()
+        {
+            yield break;
+        }
+
+
+        private readonly Dictionary<CellRef, Func<object>> _formulas = new Dictionary<CellRef, Func<object>>();
+        private readonly Dictionary<CellRef, object> _values = new Dictionary<CellRef, object>();
+
+
 
         public object this[int row, int column]
         {
-            get => this[(row, column)];
-            set => this[(row, column)] = value;
+            get => this[new CellRef(row, column)];
+            set => this[new CellRef(row, column)] = value;
         }
 
 
-        public object this[(int, int) addr]
+        public object this[CellRef addr]
         {
             get
             {
-                if (_values.TryGetValue(addr, out var result))
+                if (_formulas.TryGetValue(addr, out var formula))
                 {
+                    var result = formula();
+                    if (result is double dbl)
+                    {
+                        if (double.IsNaN(dbl))
+                        {
+                            throw new InvalidOperationException();
+                        }
+                    }
                     return result;
+                }
+                if (_values.TryGetValue(addr, out var value))
+                {
+                    return value;
                 }
                 return null;
             }
-            set => _values[addr] = value;
+            set
+            {
+                if (value is float flt)
+                {
+                    _values[addr] = (double)flt;
+                }
+                else
+                {
+                    _values[addr] = value;
+                }
+            }
         }
 
 
-
-
-        protected IEnumerable<double> AllValues(((int, int), (int, int)) range)
+        protected IEnumerable<double> AllValues(CellRange range)
         {
-            var (from, to) = range;
-            for (var r = from.Item1; r <= to.Item1; r++)
+            foreach (var addr in range)
             {
-                for (var c = from.Item2; c <= to.Item2; c++)
+                var value = this[addr];
+                if (value is double v)
                 {
-                    var value = this[r, c];
-                    if (value is double v)
-                    {
-                        yield return v;
-                    }
+                    yield return v;
                 }
             }
         }
 
 
 
-        protected double Negate(object value) => -Get<double>(value);
+        protected double Negate(object value) => -GetDouble(value);
 
-        protected object Plus(object value) => Get<double>(value);
-
-
-
-        protected double Add(object v1, object v2) => Get<double>(v1) + Get<double>(v2);
-        protected double Subtract(object v1, object v2) => Get<double>(v1) - Get<double>(v2);
-        protected double Multiply(object v1, object v2) => Get<double>(v1) * Get<double>(v2);
-        protected double Divide(object v1, object v2) => Get<double>(v1) / Get<double>(v2);
-
-        protected double Pow(object v1, object v2) => Math.Pow(Get<double>(v1), Get<double>(v2));
+        protected object Plus(object value) => GetDouble(value);
 
 
-        protected bool Less(object v1, object v2) => Get<double>(v1) < Get<double>(v2);
-        protected bool LessOrEqual(object v1, object v2) => Get<double>(v1) <= Get<double>(v2);
-        protected bool Greater(object v1, object v2) => Get<double>(v1) > Get<double>(v2);
-        protected bool GreaterOrEqual(object v1, object v2) => Get<double>(v1) >= Get<double>(v2);
+
+        protected double Add(object v1, object v2) => GetDouble(v1) + GetDouble(v2);
+        protected double Subtract(object v1, object v2) => GetDouble(v1) - GetDouble(v2);
+        protected double Multiply(object v1, object v2) => GetDouble(v1) * GetDouble(v2);
+        protected double Divide(object v1, object v2) => GetDouble(v1) / GetDouble(v2);
+
+        protected double Pow(object v1, object v2) => Math.Pow(GetDouble(v1), GetDouble(v2));
+
+
+        protected bool Less(object v1, object v2) => GetDouble(v1) < GetDouble(v2);
+        protected bool LessOrEqual(object v1, object v2) => GetDouble(v1) <= GetDouble(v2);
+        protected bool Greater(object v1, object v2) => GetDouble(v1) > GetDouble(v2);
+        protected bool GreaterOrEqual(object v1, object v2) => GetDouble(v1) >= GetDouble(v2);
+
+
+        private static double GetDouble(object value)
+        {
+            if (value is double dbl)
+            {
+                return dbl;
+            }
+
+            if (value is int i)
+            {
+                return i;
+            }
+
+            if (value is float f)
+            {
+                return f;
+            }
+
+            return 0;
+        }
 
         private static T Get<T>(object value, T defaultValue = default) where T: struct
         {

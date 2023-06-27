@@ -1,0 +1,27 @@
+{
+  "ontvangstPosities": [
+    {
+      "toelaatbaarDag": 65,
+      "toelaatbaarNacht": 60
+    }
+  ],
+  "dag": {
+    "lwAMaxBerekend": 62,
+    "lwATotaal": 58,
+    "voldoet": true
+  },
+  "nacht": {
+    "lwAMaxBerekend": 57,
+    "lwATotaal": 55,
+    "voldoet": true
+  },
+  "voldoet": true,
+  "additionalCells": {
+    "C35": 6,
+    "C36": 0,
+    "C37": 0,
+    "C38": 0,
+    "C39": 5,
+    "C40": 19.56302500767287
+  }
+}

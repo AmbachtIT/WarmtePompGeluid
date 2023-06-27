@@ -22,10 +22,17 @@ namespace WarmtePompGeluid.Excel
         private readonly IFormulaEvaluator _evaluator;
 
 
-        public string GetStringValue(ISheet sheet, CellReference reference) =>
+        public string GetStringValue(ISheet sheet, CellRef reference) =>
             GetStringValue(sheet.GetCell(reference));
 
         public string GetStringValue(ICell cell) => GetValue(cell)?.ToString();
+
+
+        public double? GetDoubleValue(ISheet sheet, CellRef reference) => GetDoubleValue(sheet.GetCell(reference));
+
+
+        public double? GetDoubleValue(ICell cell) => (double?)GetValue(cell);
+
 
         public object GetValue(ICell cell)
         {
@@ -35,8 +42,9 @@ namespace WarmtePompGeluid.Excel
             }
 
             var value = _evaluator.Evaluate(cell);
-            return value.CellType switch
+            return value?.CellType switch
             {
+                null => null,
                 CellType.Blank => null,
                 CellType.String => value.StringValue,
                 CellType.Boolean => value.BooleanValue,

@@ -17,7 +17,11 @@ namespace Ambacht.Common.Excel
 
 
         protected double ROUND(object value, object decimals) => Math.Round(Get<double>(value), Get<int>(decimals));
-        protected double LOG10(object value) => Math.Log10(Get<double>(value));
+        protected double LOG10(object value)
+        {
+            var arg = Get<double>(value);
+            return Math.Log10(arg);
+        }
 
         protected double SQRT(object value) => Math.Sqrt(Get<double>(value));
 
@@ -44,7 +48,7 @@ namespace Ambacht.Common.Excel
             return null;
         }
 
-        protected double MAX(((int, int), (int, int)) range)
+        protected double MAX(CellRange range)
         {
             double? result = null;
             foreach (var v in AllValues(range))
@@ -78,7 +82,7 @@ namespace Ambacht.Common.Excel
             return null;
         }
 
-        protected double MIN(((int, int), (int, int)) range)
+        protected double MIN(CellRange range)
         {
             double? result = null;
             foreach (var v in AllValues(range))
@@ -93,7 +97,7 @@ namespace Ambacht.Common.Excel
         }
 
 
-        protected double SUM(((int, int), (int, int)) range)
+        protected double SUM(CellRange range)
         {
             double? result = null;
             foreach (var v in AllValues(range))

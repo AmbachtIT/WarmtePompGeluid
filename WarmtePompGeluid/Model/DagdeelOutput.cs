@@ -9,9 +9,15 @@ namespace WarmtePompGeluid.Model
     public record class DagDeelOutput
     {
 
-        public double LwABerekend { get; set; }
+        /// <summary>
+        /// Maximaal geluid dat de bron zou mogen produceren
+        /// </summary>
+        public double? LwAMaxBerekend { get; set; }
 
-        public double LwATotaal { get; set; }
+        /// <summary>
+        /// Maximaal geluid dat de bron daadwerkelijk produceert
+        /// </summary>
+        public double? LwATotaal { get; set; }
 
         public bool Voldoet { get; set; }
 

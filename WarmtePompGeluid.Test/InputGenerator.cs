@@ -25,25 +25,33 @@ namespace WarmtePompGeluid.Test
 
         private IEnumerable<Input> Generate_AP()
         {
-            yield return Base_AP() with
-            {
-                PlanGegevens = new PlanGegevens()
-                {
-                    Omschrijving = "ok",
-                }
-            };
+            yield return SingleWindow(2);
+            yield return SingleWindow(4);
+            yield return SingleWindow(6);
         }
 
-        private Input Base_AP()
+        private Input SingleWindow(float distance)
         {
             return new Input()
             {
+                PlanGegevens = new PlanGegevens()
+                {
+                    Omschrijving = $"single-window-{distance}m"
+                },
+                DagProductie = new GeluidsProductie()
+                {
+                    LwAMax = 58
+                },
+                NachtProductie = new GeluidsProductie()
+                {
+                    LwAMax = 55
+                },
                 BronPositie = new Vector3(0, 0, 5),
                 OntvangstPosities = new List<OntvangstPositie>()
                 {
                     new OntvangstPositie()
                     {
-                        Positie = new Vector3(-3, 0, 5), // 5m naar links
+                        Positie = new Vector3(distance, 0, 5), // 3m naar links
                         QGeluidsBron = 2,
                         QOntvanger = 2,
                         IsBuitenUnitAfgeschermd = false,

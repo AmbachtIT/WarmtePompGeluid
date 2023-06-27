@@ -39,27 +39,42 @@ namespace Ambacht.Common.Excel
         }
 
 
-        public static void SetValue(this ISheet sheet, CellReference reference, object value) =>
+        public static void SetValue(this ISheet sheet, CellRef reference, object value) =>
             sheet
                 .GetOrCreateCell(reference)
                 .SetValue(value);
 
         public static void SetValue(this ICell cell, object value)
         {
-            if (value is string str)
+            if (value == null)
+            {
+                cell.SetBlank();
+            }
+            else if (value is string str)
             {
                 cell.SetCellValue(str);
             }
-
-            if (value is double dbl)
+            else if (value is double dbl)
             {
                 cell.SetCellValue(dbl);
+            }
+            else if (value is float flt)
+            {
+                cell.SetCellValue(flt);
+            }
+            else if (value is int i)
+            {
+                cell.SetCellValue(i);
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
 
 
 
-        public static ICell GetOrCreateCell(this ISheet sheet, CellReference reference) =>
+        public static ICell GetOrCreateCell(this ISheet sheet, CellRef reference) =>
             sheet.GetOrCreateRow(reference.Row)
                 .GetOrCreateCell(reference.Col);
 
@@ -70,20 +85,11 @@ namespace Ambacht.Common.Excel
             row.GetCell(colNr) ?? row.CreateCell(colNr);
 
 
-        public static ICell GetCell(this ISheet sheet, string reference) => sheet.GetCell(new CellReference(reference));
+        public static ICell GetCell(this ISheet sheet, string reference) => sheet.GetCell(new CellRef(reference));
 
-        public static ICell GetCell(this ISheet sheet, CellReference reference) =>
+        public static ICell GetCell(this ISheet sheet, CellRef reference) =>
             sheet.GetRow(reference.Row)
                 ?.GetCell(reference.Col);
-
-
-
-
-        public static CellReference Translate(this CellReference reference, int deltaRows, int deltaColumns) => new CellReference(reference.Row + deltaRows, reference.Col + deltaColumns);
-
-        public static CellReference Below(this CellReference reference) => reference.Translate(1, 0);
-
-
 
     }
 }

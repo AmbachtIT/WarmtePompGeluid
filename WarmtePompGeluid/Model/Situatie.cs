@@ -28,7 +28,7 @@ namespace WarmtePompGeluid.Model
             {
                 DagProductie = GenerateProductie(random),
             };
-            result.AvondNachtProductie = result.DagProductie with { LwAMax = result.DagProductie.LwAMax - random.Next(0, 6) };
+            result.NachtProductie = result.DagProductie with { LwAMax = result.DagProductie.LwAMax - random.Next(0, 6) };
             return result;
         }
 

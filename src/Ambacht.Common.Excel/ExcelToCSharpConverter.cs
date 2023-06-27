@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,8 @@ public class ExcelToCSharpConverter
 
 
     private readonly ExcelExpressionTreeBuilder _builder;
-    private readonly HashSet<string> _addresses = new HashSet<string>();
+    private readonly HashSet<string> _addresses = new();
+    private readonly Dictionary<string, string> _formulas = new();
 
 
     public string Namespace { get; set; }
@@ -35,6 +37,7 @@ public class ExcelToCSharpConverter
     public async Task Convert(TextWriter writer, IEnumerable<CellReference> references, ISheet sheet)
     {
         _addresses.Clear();
+        _formulas.Clear();
 
         await writer.WriteLineAsync("using System;");
         await writer.WriteLineAsync("using System.Collections.Generic;");
@@ -53,7 +56,7 @@ public class ExcelToCSharpConverter
         {
             if (item.IsInput)
             {
-                await WriteInput(writer, item);
+                await WriteProperty(writer, item);
             }
             else
             {
@@ -61,43 +64,39 @@ public class ExcelToCSharpConverter
             }
         }
 
+        await WriteFormulas(writer);
+
         await WriteAddresses(writer);
 
         await writer.WriteLineAsync("}");
 
     }
 
-    private async Task WriteInput(TextWriter writer, ExcelExpressionTreeBuilder.Node item)
+    
+
+    private async Task WriteProperty(TextWriter writer, ExcelExpressionTreeBuilder.Node item)
     {
-        var type = GetVariableType(item);
         await writer.WriteLineAsync();
         await writer.WriteLineAsync("\t/// <summary>");
         await writer.WriteLineAsync($"\t/// {item.Description}");
         await writer.WriteLineAsync("\t/// </summary>");
-        await writer.WriteLineAsync($"\tpublic {type} {CellName(item.CellName)} {{");
-        var cast = type == "object" ? "" : $"({type})";
-        await writer.WriteLineAsync($"\t\tget => {cast}this[Addresses.{item.CellName}];");
+        await writer.WriteLineAsync($"\tpublic object {CellName(item.CellName)} {{");
+        await writer.WriteLineAsync($"\t\tget => this[Addresses.{item.CellName}];");
         await writer.WriteLineAsync($"\t\tset => this[Addresses.{item.CellName}] = value;");
         await writer.WriteLineAsync($"\t}}");
         await writer.WriteLineAsync();
     }
 
-    private string GetVariableType(ExcelExpressionTreeBuilder.Node item) => item.CellType switch
-    {
-        CellType.Numeric => "double?",
-        CellType.String => "string",
-        _ => "object"
-    };
-
     private async Task WriteFormula(TextWriter writer, ExcelExpressionTreeBuilder.Node item)
     {
+        await WriteProperty(writer, item);
+        var name = CellName(item.CellName);
+        if (name == "C35")
+        {
+            Debugger.Break();
+        }
         var expression = GetExpression(item.Expression);
-        await writer.WriteLineAsync();
-        await writer.WriteLineAsync("\t/// <summary>");
-        await writer.WriteLineAsync($"\t/// {item.Description}");
-        await writer.WriteLineAsync("\t/// </summary>");
-        await writer.WriteLineAsync($"\tpublic object {item.CellName} => {expression};");
-        await writer.WriteLineAsync();
+        _formulas.Add(CellName(name), expression);
     }
 
     private string GetExpression(ExcelAstNode expression)
@@ -197,7 +196,7 @@ public class ExcelToCSharpConverter
     {
         if (op.Left is ExcelVariableNode left && op.Right is ExcelVariableNode right)
         {
-            builder.Append($"(Addresses.{CellName(left.Name)}, Addresses.{CellName(right.Name)})");
+            builder.Append($"new CellRange(Addresses.{CellName(left.Name)}, Addresses.{CellName(right.Name)})");
         }
         else
         {
@@ -221,14 +220,27 @@ public class ExcelToCSharpConverter
         builder.Append(")");
     }
 
+    private async Task WriteFormulas(TextWriter writer)
+    {
+        await writer.WriteLineAsync($"\t");
+        await writer.WriteLineAsync($"\tprotected override IEnumerable<KeyValuePair<string, Func<object>>> GetFormulas()");
+        await writer.WriteLineAsync($"\t{{");
+        foreach (var formula in _formulas)
+        {
+
+            await writer.WriteLineAsync($"\t\tyield return new KeyValuePair<string, Func<object>>(\"{formula.Key}\", () => {formula.Value});");
+        }
+        await writer.WriteLineAsync($"\t}}");
+        await writer.WriteLineAsync($"\t");
+    }
+
     private async Task WriteAddresses(TextWriter writer)
     {
         await writer.WriteLineAsync($"\tpublic static class Addresses");
         await writer.WriteLineAsync($"\t{{");
         foreach (var address in _addresses.Order())
         {
-            var addr = new CellAddress(address);
-            await writer.WriteLineAsync($"\t\tpublic static readonly (int, int) {address} = new({addr.Row}, {addr.Column});");
+            await writer.WriteLineAsync($"\t\tpublic static readonly CellRef {address} = CellRef.Parse(\"{address}\");");
         }
         await writer.WriteLineAsync($"\t}}");
 

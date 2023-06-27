@@ -2,6 +2,7 @@
 using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,7 +71,7 @@ namespace Ambacht.Common.Excel
                     return new ExcelParenthesesNode(result);
 
                 case ExcelTokenType.Number:
-                    return new ExcelConstantNode<double>(double.Parse(token.Value));
+                    return new ExcelConstantNode<double>(double.Parse(token.Value, CultureInfo.InvariantCulture));
                 case ExcelTokenType.String:
                     return new ExcelConstantNode<string>(token.Value);
                 case ExcelTokenType.Boolean:
