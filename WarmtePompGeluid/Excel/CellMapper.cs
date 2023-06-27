@@ -18,12 +18,13 @@ namespace WarmtePompGeluid.Excel
 
         public static void WriteToSheet(this ISheetAdapter sheet, Input input)
         {
+            var situatie = Situatie.ByName(input.Situatie);
             sheet.WriteToSheet(input.PlanGegevens);
             sheet.WriteToSheet(input.BronPositie);
             sheet.SetValue("B16", input.Marge);
-            sheet.WriteToSheet(input.DagProductie, input.Situatie, 2);
-            sheet.WriteToSheet(input.NachtProductie, input.Situatie, 5);
-            sheet.WriteToSheet(input.OntvangstPosities, input.Situatie);
+            sheet.WriteToSheet(input.DagProductie, situatie, 2);
+            sheet.WriteToSheet(input.NachtProductie, situatie, 5);
+            sheet.WriteToSheet(input.OntvangstPosities, situatie);
         }
 
 
@@ -44,10 +45,10 @@ namespace WarmtePompGeluid.Excel
         }
 
 
-        private static void WriteToSheet(this ISheetAdapter sheet, List<OntvangstPositie> posities, string model)
+        private static void WriteToSheet(this ISheetAdapter sheet, List<OntvangstPositie> posities, Situatie situatie)
         {
-            var row = GetOntvangstPositieInputRow(model);
-            var count = GetExtraPositieCount(model);
+            var row = situatie.OntvangstPositieInputRow - 1;
+            var count = situatie.OntvangstPositieCount;
             for (var i = 0; i < count; i++)
             {
                 var col = 2 + i;
@@ -82,9 +83,9 @@ namespace WarmtePompGeluid.Excel
         }
 
 
-        private static void WriteToSheet(this ISheetAdapter sheet, GeluidsProductie productie, string model, int column)
+        private static void WriteToSheet(this ISheetAdapter sheet, GeluidsProductie productie, Situatie situatie, int column)
         {
-            var reference = new CellRef(GetResultRow(model) - 4, column);
+            var reference = new CellRef(situatie.ResultRow - 5, column);
             sheet.SetValue(reference, productie.LwAMax);
             sheet.SetValue(reference = reference.Below(), productie.K1);
             sheet.SetValue(reference = reference.Below(), productie.DOmkasting);
@@ -92,21 +93,22 @@ namespace WarmtePompGeluid.Excel
 
 
 
-        public static Output ReadOutput(this ISheetAdapter sheet, string model)
+        public static Output ReadOutput(this ISheetAdapter sheet, string situatieName)
         {
+            var situatie = Situatie.ByName(situatieName);
             return new Output()
             {
-                Dag = sheet.ReadDagdeel(model, 1),
-                Nacht = sheet.ReadDagdeel(model, 4),
-                OntvangstPosities = sheet.ReadPosities(model).ToList()
+                Dag = sheet.ReadDagdeel(situatie, 1),
+                Nacht = sheet.ReadDagdeel(situatie, 4),
+                OntvangstPosities = sheet.ReadPosities(situatie).ToList()
             };
         }
 
-        public static IEnumerable<OntvangstPositieOutput> ReadPosities(this ISheetAdapter sheet, string model)
+        public static IEnumerable<OntvangstPositieOutput> ReadPosities(this ISheetAdapter sheet, Situatie situatie)
         {
-            var inputRow = GetOntvangstPositieInputRow(model);
-            var count = GetExtraPositieCount(model);
-            var rowToelaatbaar = GetOntvangstPositieToelaatbaarRow(model);
+            var inputRow = situatie.OntvangstPositieInputRow - 1;
+            var count = situatie.OntvangstPositieCount;
+            var rowToelaatbaar = situatie.OntvangstPositieToelaatbaarRow - 1;
             for (var i = 0; i < count; i++)
             {
                 var col = 2 + i;
@@ -122,9 +124,9 @@ namespace WarmtePompGeluid.Excel
             }
         }
 
-        public static DagDeelOutput ReadDagdeel(this ISheetAdapter sheet, string model, int col)
+        public static DagDeelOutput ReadDagdeel(this ISheetAdapter sheet, Situatie situatie, int col)
         {
-            var row = GetResultRow(model);
+            var row = situatie.ResultRow - 1;
             return new DagDeelOutput()
             {
                 LwAMaxBerekend = sheet.GetDoubleValue(new CellRef(row - 15, col + 1)),
@@ -133,31 +135,9 @@ namespace WarmtePompGeluid.Excel
             };
         }
 
-        private static int GetResultRow(string model) => model switch
-        {
-            "AP" => 69,
-            "Gg_3" => 85,
-            _ => 88
-        };
-
-        private static int GetOntvangstPositieInputRow(string model) => model switch
-        {
-            "AP" => 19,
-            _ => -1
-        };
-
-        private static int GetOntvangstPositieToelaatbaarRow(string model) => model switch
-        {
-            "AP" => 43,
-            _ => -1
-        };
 
 
-        private static int GetExtraPositieCount(string model) => model switch
-        {
-            "AP" => 8,
-            _ => 0
-        };
+
 
 
     }

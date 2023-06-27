@@ -20,7 +20,6 @@ namespace WarmtePompGeluid
 
             SheetAdapter = new CSharpSheetAdapter(calculator);
             SheetAdapter.WriteToSheet(input);
-            
 
             var output = SheetAdapter.ReadOutput(input.Situatie);
             await Task.CompletedTask;

@@ -21,6 +21,22 @@ namespace WarmtePompGeluid.Model
         /// </summary>
         public int ResultRow { get; init; }
 
+        /// <summary>
+        /// First row of ontvangstpositie columns (will contain x if position is used, 'nvt' if it is not), 1-based
+        /// </summary>
+        public int OntvangstPositieInputRow { get; init; }
+
+        /// <summary>
+        /// Maximum number of ontvangstposities
+        /// </summary>
+        public int OntvangstPositieCount { get; init; }
+
+
+        /// <summary>
+        /// Row of containing day and night values of maximum allowed level, 1-based
+        /// </summary>
+        public int OntvangstPositieToelaatbaarRow { get; init; }
+
 
         public virtual Input GenerateInput(Random random)
         {
@@ -104,7 +120,10 @@ namespace WarmtePompGeluid.Model
         {
             Name = nameof(AP),
             Description = "Buitenunit bij/op appartementengebouw",
-            ResultRow = 70
+            ResultRow = 70,
+            OntvangstPositieInputRow = 20,
+            OntvangstPositieCount = 8,
+            OntvangstPositieToelaatbaarRow = 44
         };
         public static readonly Situatie Gg_1 = new Situatie()
         {
@@ -132,7 +151,6 @@ namespace WarmtePompGeluid.Model
             ResultRow = 86
         };
 
-        
 
 
         public static IEnumerable<Situatie> All()
