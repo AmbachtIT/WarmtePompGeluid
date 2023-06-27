@@ -15,13 +15,5 @@
     "lwATotaal": 55,
     "voldoet": false
   },
-  "voldoet": false,
-  "additionalCells": {
-    "C35": 4,
-    "C36": 0,
-    "C37": 0,
-    "C38": 0,
-    "C39": 5,
-    "C40": 16.041199826559247
-  }
+  "voldoet": false
 }

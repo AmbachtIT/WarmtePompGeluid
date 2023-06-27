@@ -20,6 +20,7 @@ namespace WarmtePompGeluid.Excel
         {
             sheet.WriteToSheet(input.PlanGegevens);
             sheet.WriteToSheet(input.BronPositie);
+            sheet.SetValue("B16", input.Marge);
             sheet.WriteToSheet(input.DagProductie, input.Situatie, 2);
             sheet.WriteToSheet(input.NachtProductie, input.Situatie, 5);
             sheet.WriteToSheet(input.OntvangstPosities, input.Situatie);

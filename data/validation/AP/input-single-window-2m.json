@@ -3,6 +3,7 @@
   "planGegevens": {
     "omschrijving": "single-window-2m"
   },
+  "marge": 3,
   "bronPositie": [
     0,
     0,

@@ -14,6 +14,7 @@ namespace WarmtePompGeluid.Model
 
         public PlanGegevens PlanGegevens { get; init; } = new PlanGegevens();
 
+        public double Marge { get; set; } = 3;
 
         public Vector3 BronPositie { get; set; } = Vector3.Zero;
 

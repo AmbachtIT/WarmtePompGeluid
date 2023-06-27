@@ -6,22 +6,14 @@
     }
   ],
   "dag": {
-    "lwAMaxBerekend": 55,
+    "lwAMaxBerekend": 52,
     "lwATotaal": 58,
     "voldoet": false
   },
   "nacht": {
-    "lwAMaxBerekend": 50,
+    "lwAMaxBerekend": 47,
     "lwATotaal": 55,
     "voldoet": false
   },
-  "voldoet": false,
-  "additionalCells": {
-    "C35": 2,
-    "C36": 0,
-    "C37": 0,
-    "C38": 0,
-    "C39": 5,
-    "C40": 10.020599913279625
-  }
+  "voldoet": false
 }

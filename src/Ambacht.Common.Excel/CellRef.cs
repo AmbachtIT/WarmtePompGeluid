@@ -84,7 +84,12 @@ namespace Ambacht.Common.Excel
         }
 
         public override string ToString() => ConvertToAddress(Row + 1, Col + 1);
+
+
+        public static implicit operator CellRef(string value) => new(value);
+
     }
+
 
 
     public static class CellRefExtensions

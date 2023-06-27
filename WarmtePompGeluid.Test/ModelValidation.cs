@@ -17,6 +17,33 @@ namespace WarmtePompGeluid.Test
     {
 
         [Test(), TestCaseSource(nameof(AllScenarios)), Explicit()]
+        public async Task Run(Input input)
+        {
+            await RunCSharp(input);
+            await RunExcel(input);
+            VerifyModelsAreEqual(input);
+        }
+
+
+        [Test(), TestCaseSource(nameof(AllScenarios)), Explicit()]
+        public async Task RunCSharp(Input input)
+        {
+            await Serialize(input);
+            var calculator = Calculator.CreateCSharp();
+
+            var output = await calculator.Run(input);
+            AddAdditionalInfo(output, calculator);
+
+            var adapter = calculator.SheetAdapter;
+
+
+            Console.WriteLine(adapter.GetValue(new("C35")));
+
+            var json = _serializer.SerializeObject(output);
+            await File.WriteAllTextAsync(GetOutputPath(input, "output", "-csharp.json"), json);
+        }
+
+        [Test(), TestCaseSource(nameof(AllScenarios)), Explicit()]
         public async Task RunExcel(Input input)
         {
             await Serialize(input);
@@ -33,48 +60,42 @@ namespace WarmtePompGeluid.Test
 
         }
 
-        private void AddAdditionalInfo(Output output, Calculator calculator)
-        {
-            output.AdditionalCells = new Dictionary<string, object>();
-            foreach (var addr in new[] { "C35", "C36", "C37", "C38", "C39", "C40" })
-            {
-                output.AdditionalCells.Add(addr, calculator.SheetAdapter.GetValue(new CellRef(addr)));
-            }
-        }
 
 
         [Test(), TestCaseSource(nameof(AllScenarios)), Explicit()]
-        public async Task RunCSharp(Input input)
+        public void VerifyModelsAreEqual(Input input)
         {
-            await Serialize(input);
-            var calculator = Calculator.CreateCSharp();
-
-            var output = await calculator.Run(input);
-            AddAdditionalInfo(output, calculator);
-
-            var adapter = calculator.SheetAdapter;
-
-            Console.Write(adapter.GetValue(new("B11")));
-            Console.Write("-");
-            Console.Write(adapter.GetValue(new("C20")));
-            Console.WriteLine();
-
-            Console.Write(adapter.GetValue(new("B11")));
-            Console.Write("-");
-            Console.Write(adapter.GetValue(new("C21")));
-            Console.WriteLine();
-
-            Console.Write(adapter.GetValue(new("B13")));
-            Console.Write("-");
-            Console.Write(adapter.GetValue(new("C22")));
-            Console.WriteLine();
-
-
-            Console.WriteLine(adapter.GetValue(new("C35")));
-
-            var json = _serializer.SerializeObject(output);
-            await File.WriteAllTextAsync(GetOutputPath(input, "output", "-csharp.json"), json);
+            FileAssert.AreEqual(GetOutputPath(input, "output", "-excel.json"),
+                GetOutputPath(input, "output", "-csharp.json"));
         }
+
+
+        private void AddAdditionalInfo(Output output, Calculator calculator)
+        {
+            if (AdditionalCells().Any())
+            {
+                output.AdditionalCells = new Dictionary<string, object>();
+                foreach (var addr in AdditionalCells())
+                {
+                    output.AdditionalCells.Add(addr, calculator.SheetAdapter.GetValue(new CellRef(addr)));
+                }
+            }
+        }
+
+        private IEnumerable<string> AdditionalCells()
+        {
+            yield break;
+            /*
+             yield return "B16";
+            yield return "C48";
+            foreach (var addr in new CellRange("C46", "J46"))
+            {
+                yield return addr.ToString();
+            }
+            */
+        }
+
+
 
 
 
